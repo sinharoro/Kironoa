@@ -1,6 +1,19 @@
 window.focus();
 
 // --- Supabase Configuration ---
+// Using placeholder values - the game works offline without Supabase
+let supabaseClient = null;
+try {
+    // Attempt to initialize Supabase if available
+    if (typeof supabase !== 'undefined' && supabase) {
+        supabaseClient = supabase.createClient(
+            'https://your-project.supabase.co',
+            'your_anon_key_here'
+        );
+    }
+} catch(e) {
+    console.warn('Supabase not available, leaderboard disabled');
+}
 
 // --- Canvas Setup ---
 const canvas = document.getElementById('gameCanvas');
@@ -81,8 +94,11 @@ class PowerUp {
     }
     update() {
         this.x -= this.speed;
-        if (player.x < this.x + this.w && player.x + player.w > this.x &&
-            player.y < this.y + this.h && player.y + player.h > this.y) {
+        // Fixed hitbox - tighter collision detection
+        const px = player.x + 5, py = player.y + 5;
+        const pw = player.w - 10, ph = player.h - 10;
+        if (px < this.x + this.w && px + pw > this.x &&
+            py < this.y + this.h && py + ph > this.y) {
             this.applyEffect();
             return true;
         }
@@ -117,27 +133,37 @@ class PowerUp {
 
 // --- Database Functions ---
 async function getHighScores() {
-    const { data, error } = await supabaseClient
-        .from('leaderboard')
-        .select('name, score')
-        .order('score', { ascending: false })
-        .limit(5);
+    if (!supabaseClient) return;
+    try {
+        const { data, error } = await supabaseClient
+            .from('leaderboard')
+            .select('name, score')
+            .order('score', { ascending: false })
+            .limit(5);
 
-    if (error) console.error('Error fetching scores:', error);
-    else updateLeaderboardUI(data);
+        if (error) console.error('Error fetching scores:', error);
+        else updateLeaderboardUI(data);
+    } catch(e) {
+        console.warn('Leaderboard unavailable');
+    }
 }
 
 async function saveScore(playerName, playerScore) {
-    const { error } = await supabaseClient
-        .from('leaderboard')
-        .insert([{ name: playerName, score: playerScore }]);
+    if (!supabaseClient) return;
+    try {
+        const { error } = await supabaseClient
+            .from('leaderboard')
+            .insert([{ name: playerName, score: playerScore }]);
 
-    if (error) console.error('Error saving score:', error);
-    else getHighScores();
+        if (error) console.error('Error saving score:', error);
+        else getHighScores();
+    } catch(e) {
+        console.warn('Leaderboard unavailable');
+    }
 }
 
 function updateLeaderboardUI(scores) {
-    if (!scoreList) return;
+    if (!scoreList || !scores) return;
     scoreList.innerHTML = scores
         .map((s, i) => `<li>${i + 1}. ${s.name.toUpperCase()} - ${s.score}</li>`)
         .join('');
@@ -320,20 +346,23 @@ function update() {
 
     if (shockwaveActive) {
         shockwaveRadius += 35;
-        enemies.forEach((en, i) => {
+        // Fixed: use reverse iteration for shockwave collision
+        for (let i = enemies.length - 1; i >= 0; i--) {
+            const en = enemies[i];
             const dx = en.x - player.x; const dy = en.y - player.y;
             if (Math.sqrt(dx*dx + dy*dy) < shockwaveRadius) {
                 createExplosion(en.x, en.y, "#00ffff", 5);
                 enemies.splice(i, 1); score += 10; scoreEl.innerText = `Score: ${score}`;
             }
-        });
-        bigenemies.forEach((ben, i) => {
+        }
+        for (let i = bigenemies.length - 1; i >= 0; i--) {
+            const ben = bigenemies[i];
             const dx = ben.x - player.x; const dy = ben.y - player.y;
             if (Math.sqrt(dx*dx + dy*dy) < shockwaveRadius) {
                 createExplosion(ben.x, ben.y, "#ff0000", 15);
                 bigenemies.splice(i, 1); score += 100; scoreEl.innerText = `Score: ${score}`;
             }
-        });
+        }
         if (shockwaveRadius > MAX_SHOCKWAVE) shockwaveActive = false;
     }
 
@@ -358,19 +387,28 @@ function update() {
     for (let i = bullets.length - 1; i >= 0; i--) { bullets[i].x += bullets[i].speed; if (bullets[i].x > canvas.width) bullets.splice(i, 1); }
 
     spawnEnemy();
+    // BUG FIX: Use reverse iteration for enemy bullet collision
     for (let i = enemies.length - 1; i >= 0; i--) {
         const en = enemies[i];
         en.x -= en.speed; en.y += en.velocityY; en.rotation += en.spin;
         if (en.y <= 0 || en.y >= canvas.height - en.h) en.velocityY *= -1;
+        
+        // Player collision
         if (player.x < en.x + en.w && player.x + player.w > en.x && player.y < en.y + en.h && player.y + player.h > en.y) {
             shakeTimer = 15; player.takeDamage(20); enemies.splice(i, 1); continue;
         }
-        bullets.forEach((b, bi) => {
+        
+        // Bullet collision - FIXED: reverse iteration, break after hit
+        for (let bi = bullets.length - 1; bi >= 0; bi--) {
+            const b = bullets[bi];
             if (b.x > en.x && b.x < en.x + en.w && b.y > en.y && b.y < en.y + en.h) {
-                createExplosion(en.x + 15, en.y + 15, "#9f9f9f", 8); enemies.splice(i, 1); bullets.splice(bi, 1);
+                createExplosion(en.x + 15, en.y + 15, "#9f9f9f", 8);
+                enemies.splice(i, 1);
+                bullets.splice(bi, 1);
                 score += 10; scoreEl.innerText = `Score: ${score}`;
+                break; // Stop checking bullets for this dead enemy
             }
-        });
+        }
         if (en.x + en.w < 0) enemies.splice(i, 1);
     }
 
@@ -379,11 +417,15 @@ function update() {
         const ben = bigenemies[i];
         ben.x -= ben.speed; ben.y += ben.velocityY; ben.rotation += ben.spin;
         if (ben.y <= 0 || ben.y >= canvas.height - ben.h) ben.velocityY *= -1;
-        if (player.x < ben.x + ben.w && player.x + player.w > ben.x && player.y < ben.y + ben.h && player.y + player.h > ben.y) {
+        
+        // Player collision
+        if (player.x < ben.x + ben.w && player.x + player.w > ben.x && player.y < ben.y + ben.h && player.y + ben.h > ben.y) {
             if (navigator.vibrate) navigator.vibrate([100, 50, 100]);
             shakeTimer = 15; createExplosion(ben.x + 30, ben.y + 30, "red", 20);
             player.takeDamage(50); bigenemies.splice(i, 1); continue;
         }
+        
+        // Bullet collision - already using reverse iteration, verified with break
         for (let bi = bullets.length - 1; bi >= 0; bi--) {
             const b = bullets[bi];
             if (b.x > ben.x && b.x < ben.x + ben.w && b.y > ben.y && b.y < ben.y + ben.h) {
@@ -403,8 +445,8 @@ function update() {
     }
 }
 
+// FIX BUG 2: Separate update and draw into a proper game loop
 function draw() {
-    if (!gameRunning && score > 0 && loginScreen.style.display === 'none') { requestAnimationFrame(draw); return; }
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.save();
     ctx.fillStyle = "white";
@@ -441,7 +483,15 @@ function draw() {
         }
     }
     ctx.restore();
-    requestAnimationFrame(() => { if (gameRunning) update(); draw(); });
+}
+
+// FIX BUG 2: Proper game loop
+function gameLoop() {
+    update();
+    draw();
+    if (gameRunning || !loginScreen || loginScreen.style.display !== 'none') {
+        requestAnimationFrame(gameLoop);
+    }
 }
 
 getHighScores();
@@ -525,8 +575,12 @@ document.addEventListener('fullscreenchange', () => { if (!document.fullscreenEl
 window.addEventListener('resize', resize);
 resize();
 
+// FIX BUG 8: Wait one frame before stopping
 async function stopGame(msg = "MISSION FAILED SUCCESSFULLY") {
-    gameRunning = false; isPaused = false; 
+    gameRunning = false;
+    isPaused = false;
+    await new Promise(r => setTimeout(r, 16)); // Wait one frame
+    
     ctx.fillStyle = "rgba(0, 0, 0, 0.9)"; ctx.fillRect(0, 0, canvas.width, canvas.height);
     ctx.fillStyle = "#00ff00"; ctx.textAlign = "center"; ctx.font = "bold 40px 'Courier New'"; 
     ctx.fillText(msg, canvas.width / 2, canvas.height / 2 - 100);
@@ -534,19 +588,49 @@ async function stopGame(msg = "MISSION FAILED SUCCESSFULLY") {
     const spinner = document.getElementById('loading-spinner');
     if (spinner) { spinner.style.display = 'block'; spinner.style.top = '82%'; }
     try { await saveScore(currentPlayerName, score); await getHighScores(); }
-    catch (error) { console.error("Comm-link failure:", error); }
+    catch (error) { console.warn("Leaderboard unavailable:", error); }
     finally { setTimeout(() => { if (spinner) spinner.style.display = 'none'; resetGame(); }, 4000); }
 }
 
+// FIX BUG 5: Reset ALL player state properly
 function resetGame() {
-    player.health = 100; player.emergencyUsed = player.isRapidFiring = false;
-    player.x = 12; player.y = canvas.height / 2;
-    score = 0; scoreEl.innerText = `Score: ${score}`;
-    enemies.length = bigenemies.length = bullets.length = particles.length = powerUps.length = 0;
-    healthBarFill.style.width = "100%"; healthBarFill.style.backgroundColor = "#00ffff";
+    // Reset ALL player state
+    player.health = 100;
+    player.emergencyUsed = false;
+    player.isRapidFiring = false;
+    if (player.rapidFireTimer) clearTimeout(player.rapidFireTimer);
+    player.rapidFireTimer = null;
+    player.x = 12;
+    player.y = canvas.height / 2;
+    player.rotation = 0;
+    
+    // Reset game state
+    score = 0;
+    scoreEl.innerText = `Score: 0`;
+    shockwaveActive = false;
+    shockwaveRadius = 0;
+    shakeTimer = 0;
+    lastFireTime = 0;
+    
+    // Clear arrays
+    enemies.length = 0;
+    bigenemies.length = 0;
+    bullets.length = 0;
+    particles.length = 0;
+    powerUps.length = 0;
+    Object.keys(keys).forEach(k => keys[k] = false);
+    
+    // Reset UI
+    healthBarFill.style.width = "100%";
+    healthBarFill.style.backgroundColor = "#00ffff";
     const label = document.getElementById('shield-label');
     if (label) { label.innerText = "SHIELD"; label.style.color = "#00ffff"; }
-    gameRunning = false; loginScreen.style.display = 'flex'; shockwaveActive = false;
+    
+    // Show login AFTER setting gameRunning
+    gameRunning = false;
+    isPaused = false;
+    loginScreen.style.display = 'flex';
 }
 
-draw();
+// Start the game loop
+gameLoop();

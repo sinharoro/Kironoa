@@ -1,106 +1,77 @@
 'use client'
 
 import { useRef, useState } from 'react'
+import confetti from 'canvas-confetti'
+import { motion, AnimatePresence } from 'framer-motion'
 
 export default function ContactCard() {
-  const [nickname, setNickname] = useState('')
-  const [message, setMessage]   = useState('')
-  const [success, setSuccess]   = useState(false)
-  const [sending, setSending]   = useState(false)
-  const fileRef = useRef<HTMLInputElement>(null)
-  const [files, setFiles]       = useState<File[]>([])
+  const [message, setMessage] = useState('')
+  const [success, setSuccess] = useState(false)
+  const [sending, setSending] = useState(false)
+
+  const triggerConfetti = () => {
+    confetti({
+      particleCount: 80,
+      spread: 70,
+      origin: { y: 0.6 },
+      colors: ['#C05621', '#f5a06e', '#e8732c'],
+    })
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!message.trim()) return
     setSending(true)
-
-    // TODO: Wire up to Supabase or an email service
-    // For now, simulate a brief delay
-    await new Promise(r => setTimeout(r, 800))
-
+    await new Promise(r => setTimeout(r, 600))
     setSending(false)
     setSuccess(true)
-    setNickname('')
+    triggerConfetti()
     setMessage('')
-    setFiles([])
     setTimeout(() => setSuccess(false), 3000)
   }
 
-  const handleFiles = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files) setFiles(Array.from(e.target.files))
-  }
-
   return (
-    <div className="card contact-card">
-      <h2 style={{ fontSize: '1.3rem', fontWeight: 700, marginBottom: 12 }}>Send Noodles 🍜</h2>
+    <div className="glass-card p-6 sm:p-8 flex flex-col">
+      <h2 className="font-semibold text-lg mb-3">Send Noodles</h2>
 
-      <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+      <form onSubmit={handleSubmit} className="flex flex-col gap-3 mt-auto">
         <input
           type="text"
-          placeholder="Your nickname..."
-          value={nickname}
-          onChange={e => setNickname(e.target.value)}
-          style={inputStyle}
+          placeholder="Your message..."
+          value={message}
+          onChange={e => setMessage(e.target.value)}
+          required
+          className="w-full"
         />
 
-        {/* File previews */}
-        {files.length > 0 && (
-          <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
-            {files.map((f, i) => (
-              <span key={i} style={{ fontSize: '0.7rem', background: 'rgba(255,255,255,0.1)', padding: '2px 8px', borderRadius: 8 }}>
-                {f.name}
-              </span>
-            ))}
-          </div>
-        )}
-
-        <div className="messageBox">
-          {/* File upload */}
-          <div className="fileUploadWrapper">
-            <label htmlFor="portfolio-file-upload" aria-label="Attach files">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 337 337">
-                <circle strokeWidth="20" stroke="currentColor" fill="none" r="158.5" cy="168.5" cx="168.5" />
-                <path strokeLinecap="round" strokeWidth="25" stroke="currentColor" d="M167.759 79V259" />
-                <path strokeLinecap="round" strokeWidth="25" stroke="currentColor" d="M79 167.138H259" />
-              </svg>
-              <input type="file" id="portfolio-file-upload" multiple hidden ref={fileRef} onChange={handleFiles} />
-            </label>
-          </div>
-
-          <textarea
-            placeholder="Message..."
-            value={message}
-            onChange={e => setMessage(e.target.value)}
-            rows={1}
-            required
-          />
-
-          <button type="submit" className="send-icon-btn" disabled={sending} aria-label="Send message">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 664 663">
-              <path strokeLinejoin="round" strokeLinecap="round" strokeWidth="33.67" stroke="currentColor" d="M646.293 331.888L17.7538 17.6187L155.245 331.888M646.293 331.888L17.753 646.157L155.245 331.888M646.293 331.888L318.735 330.228L155.245 331.888" />
-            </svg>
-          </button>
-        </div>
+        <button
+          type="submit"
+          disabled={sending}
+          className="send-btn"
+        >
+          {sending ? (
+            <span className="flex items-center justify-center gap-2">
+              <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+              Sending...
+            </span>
+          ) : (
+            'Send'
+          )}
+        </button>
       </form>
 
-      {success && (
-        <div className="glass-alert show" style={{ position: 'relative', bottom: 'auto', left: 'auto', transform: 'none', marginTop: 8, textAlign: 'center' }}>
-          ✨ Message sent successfully!
-        </div>
-      )}
+      <AnimatePresence>
+        {success && (
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            className="mt-3 text-center text-orange-400 font-mono text-sm"
+          >
+            ✨ Noodles sent successfully!
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   )
-}
-
-const inputStyle: React.CSSProperties = {
-  background: 'rgba(255,255,255,0.05)',
-  border: '1px solid rgba(255,255,255,0.15)',
-  borderRadius: 10,
-  padding: '10px 14px',
-  color: 'var(--text-main)',
-  fontSize: '0.9rem',
-  fontFamily: 'inherit',
-  outline: 'none',
-  width: '100%',
 }

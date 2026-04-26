@@ -9,13 +9,13 @@ export default function MusicCard() {
 
   return (
     <>
-      <div className="card music-card" onClick={() => setOpen(true)} style={{ cursor: 'pointer' }}>
-        <div className="music-header">
-          <span className="now-playing-label">Favorite Track</span>
-          <span style={{ fontSize: 16 }}>🎵</span>
+      <div className="glass-card p-6 sm:p-8 cursor-pointer" onClick={() => setOpen(true)}>
+        <div className="flex justify-between items-center mb-3">
+          <span className="font-mono text-xs uppercase tracking-widest opacity-60">Favorite Track</span>
+          <span className="text-xl">🎵</span>
         </div>
 
-        <div className="static-music-content">
+        <div className="music-card-content">
           <Image
             src="/images/Keshi.png"
             alt="Keshi – Soft Spot"
@@ -23,17 +23,16 @@ export default function MusicCard() {
             height={60}
             className="album-art"
           />
-          <div className="music-info">
-            <h4 style={{ fontWeight: 700, marginBottom: 2 }}>Soft Spot</h4>
-            <p style={{ fontSize: '0.85rem', opacity: 0.7, marginBottom: 8 }}>Keshi</p>
+          <div>
+            <h4 className="font-semibold mb-0.5">Soft Spot</h4>
+            <p className="text-sm opacity-60 mb-2">Keshi</p>
             <a
               href="https://music.youtube.com/watch?v=vZ0Iogdip40"
               target="_blank"
               rel="noopener noreferrer"
-              className="play-link"
-              onClick={e => e.stopPropagation()}
+              className="play-btn"
             >
-              <button className="button"><span>Play</span></button>
+              ▶ Play
             </a>
           </div>
         </div>
@@ -41,25 +40,23 @@ export default function MusicCard() {
 
       {open && (
         <CardModal title="Currently Obsessed" onClose={() => setOpen(false)}>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 24 }}>
+          <div className="grid md:grid-cols-2 gap-6">
             <div>
-              <div style={{ fontSize: '0.7rem', letterSpacing: 2, opacity: 0.5, textTransform: 'uppercase', marginBottom: 8 }}>
-                Currently Obsessed
-              </div>
-              <h2 style={{ fontSize: '1.8rem', fontWeight: 700 }}>Soft Spot</h2>
-              <h4 style={{ opacity: 0.7, marginBottom: 16 }}>Keshi</h4>
+              <div className="font-mono text-xs uppercase tracking-widest opacity-50 mb-2">Currently Obsessed</div>
+              <h2 className="font-semibold text-3xl mb-1">Soft Spot</h2>
+              <h4 className="opacity-70 mb-4">Keshi</h4>
 
-              <hr style={{ borderColor: 'rgba(255,255,255,0.1)', marginBottom: 16 }} />
+              <hr className="border-white/10 mb-4" />
 
-              <p style={{ opacity: 0.8, lineHeight: 1.7, fontSize: '0.9rem' }}>
-                &quot;Soft Spot&quot; is a staple in my coding playlist. It provides the perfect lo-fi energy
+              <p className="opacity-80 leading-relaxed text-sm">
+                "Soft Spot" is a staple in my coding playlist. It provides the perfect lo-fi energy
                 for deep focus sessions, blending smooth vocals with a nostalgic beat.
               </p>
 
-              <div style={{ display: 'flex', gap: 12, marginTop: 20, alignItems: 'center' }}>
-                <span style={controlBtn}>⏮</span>
-                <span style={{ ...controlBtn, background: 'rgba(255,255,255,0.15)', padding: '8px 14px' }}>⏸</span>
-                <span style={controlBtn}>⏭</span>
+              <div className="flex gap-2 mt-6">
+                <span className="w-10 h-10 flex items-center justify-center bg-white/10 rounded-full cursor-pointer hover:bg-white/20">⏮</span>
+                <span className="px-4 py-2 bg-white/10 rounded-full cursor-pointer hover:bg-white/20">⏸</span>
+                <span className="w-10 h-10 flex items-center justify-center bg-white/10 rounded-full cursor-pointer hover:bg-white/20">⏭</span>
               </div>
             </div>
 
@@ -68,19 +65,11 @@ export default function MusicCard() {
               alt="Album Art"
               width={200}
               height={200}
-              style={{ borderRadius: 16, objectFit: 'cover', width: '100%', height: 'auto' }}
+              className="w-full h-auto object-cover rounded-xl"
             />
           </div>
         </CardModal>
       )}
     </>
   )
-}
-
-const controlBtn: React.CSSProperties = {
-  cursor: 'pointer',
-  fontSize: '1.2rem',
-  padding: '8px 12px',
-  background: 'rgba(255,255,255,0.08)',
-  borderRadius: 8,
 }

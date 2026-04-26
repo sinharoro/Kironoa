@@ -1,7 +1,7 @@
 export default function CertificatesSection() {
   return (
     <section id="certificates-section">
-      <h2 className="section-title">Verified Achievements</h2>
+      <h2 className="section-title" style={{ fontFamily: "'Playfair Display', serif" }}>Verified Achievements</h2>
       <div className="cert-bento-grid">
         <div className="cert-card wide">
           <div className="cert-content">
@@ -10,8 +10,7 @@ export default function CertificatesSection() {
             <p>Issued by Google • 2024</p>
           </div>
           <div className="cert-preview">
-            {/* Add certificate image here when available */}
-            <div style={{ width: '100%', height: 120, background: 'rgba(255,255,255,0.05)', borderRadius: 12, display: 'flex', alignItems: 'center', justifyContent: 'center', opacity: 0.4 }}>
+            <div style={{ width: '100%', height: 120, background: 'var(--surface)', borderRadius: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', opacity: 0.4 }}>
               📜
             </div>
           </div>

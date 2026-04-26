@@ -9,38 +9,51 @@ export default function ProfileCard() {
 
   return (
     <>
-      <div className="card profile-card" onClick={() => setOpen(true)} style={{ cursor: 'pointer' }}>
-        <div className="profile-pic-container" style={{ marginBottom: 12 }}>
+      <div className="glass-card p-6 sm:p-8 flex flex-col cursor-pointer" onClick={() => setOpen(true)}>
+        <div className="mb-4">
           <Image
             src="/images/nge.jpg"
             alt="Kironoa Roro"
-            width={80}
-            height={80}
-            className="profile-img"
+            width={100}
+            height={100}
+            className="w-20 h-20 sm:w-24 sm:h-24 object-cover"
+            style={{ 
+              borderRadius: '50%', 
+              border: '2px solid rgba(255,255,255,0.2)',
+              boxShadow: '0 0 20px rgba(232,115,44,0.3)'
+            }}
           />
         </div>
-        <div className="profile-info">
-          <h2 style={{ fontSize: '1.1rem', fontWeight: 700 }}>Kironoa Roro</h2>
-          <p style={{ fontSize: '0.85rem', opacity: 0.7, margin: '4px 0 8px' }}>
-            Bachelor of Science in Computer Science Student
-          </p>
-          <span className="badge">Open to Work</span>
-        </div>
+        
+        <h2 className="font-semibold text-xl sm:text-2xl mb-2">
+          Kironoa Roro
+        </h2>
+        
+        <hr className="border-t border-white/10 w-full my-3" />
+        
+        <p className="font-mono text-xs uppercase tracking-widest opacity-60 mb-4">
+          BSCS Student
+        </p>
+        
+        <span className="badge">
+          Open to Work
+        </span>
       </div>
 
       {open && (
         <CardModal title="Rolando F. Lobido Jr." onClose={() => setOpen(false)}>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 16, alignItems: 'center' }}>
+          <div className="flex flex-col items-center gap-4">
             <Image
               src="/images/mwemwe.jpg"
               alt="Profile"
               width={200}
               height={200}
-              style={{ borderRadius: 16, objectFit: 'cover' }}
+              className="w-40 h-40 object-cover rounded-2xl"
+              style={{ border: '2px solid rgba(255,255,255,0.1)' }}
             />
             <div>
-              <h3 style={{ marginBottom: 8 }}>Bio</h3>
-              <p style={{ opacity: 0.8, lineHeight: 1.6 }}>
+              <h3 className="font-mono text-orange-400 mb-2">Bio</h3>
+              <p className="opacity-80 leading-relaxed">
                 Vibe coder who learns by doing and experimenting.
               </p>
             </div>

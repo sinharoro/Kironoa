@@ -49,7 +49,7 @@ export default function ProjectsSection() {
   return (
     <>
       <section id="projects-section">
-        <h2 className="section-title">Selected Works</h2>
+        <h2 className="section-title" style={{ fontFamily: "'Playfair Display', serif" }}>Selected Works</h2>
         <div className="projects-gallery">
           {PROJECTS.map(p => (
             <div key={p.id} className="project-showcase-card" onClick={() => p.showcase && setActiveProject(p)}>
@@ -57,7 +57,7 @@ export default function ProjectsSection() {
                 {p.image ? (
                   <Image src={p.image} alt={p.title} width={500} height={350} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                 ) : (
-                  <div style={{ width: '100%', height: 250, background: 'rgba(255,255,255,0.05)', display: 'flex', alignItems: 'center', justifyContent: 'center', opacity: 0.3, borderRadius: 20 }}>
+                  <div style={{ width: '100%', height: 250, background: 'var(--surface)', display: 'flex', alignItems: 'center', justifyContent: 'center', opacity: 0.3 }}>
                     🖼️
                   </div>
                 )}
@@ -65,7 +65,7 @@ export default function ProjectsSection() {
 
               <div className="project-details">
                 <span className="tag" style={{ marginBottom: 12, display: 'inline-block' }}>{p.tag}</span>
-                <h3 style={{ fontSize: '1.5rem', fontWeight: 700, margin: '8px 0' }}>{p.title}</h3>
+                <h3 style={{ fontFamily: "'Playfair Display', serif", fontSize: '1.5rem', fontWeight: 700, margin: '8px 0' }}>{p.title}</h3>
                 <p style={{ opacity: 0.7, lineHeight: 1.6, marginBottom: 20 }}>{p.description}</p>
                 <div style={{ display: 'flex', gap: 12 }}>
                   {p.showcase && (
@@ -91,7 +91,7 @@ export default function ProjectsSection() {
           <div className="project-glass-content" onClick={e => e.stopPropagation()}>
             <button className="close-project-btn" onClick={() => setActiveProject(null)}>&times;</button>
             <span className="tag" style={{ marginBottom: 16, display: 'inline-block' }}>{activeProject.tag}</span>
-            <h2 style={{ fontSize: '2rem', fontWeight: 700, margin: '8px 0 16px' }}>{activeProject.title}</h2>
+            <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: '2rem', fontWeight: 700, margin: '8px 0 16px' }}>{activeProject.title}</h2>
             <p style={{ opacity: 0.8, lineHeight: 1.7, marginBottom: 24 }}>{activeProject.showcase?.details}</p>
 
             {activeProject.showcase?.images && (
@@ -103,7 +103,7 @@ export default function ProjectsSection() {
                     alt={`${activeProject.title} screenshot ${i + 1}`}
                     width={300}
                     height={200}
-                    style={{ borderRadius: 12, flex: '1 1 200px', height: 'auto', objectFit: 'cover' }}
+                    style={{ flex: '1 1 200px', height: 'auto', objectFit: 'cover' }}
                   />
                 ))}
               </div>
@@ -117,10 +117,11 @@ export default function ProjectsSection() {
 
 const viewBtnStyle: React.CSSProperties = {
   padding: '10px 20px',
-  background: 'rgba(255,255,255,0.1)',
-  border: '1px solid rgba(255,255,255,0.2)',
-  borderRadius: 50,
+  background: 'var(--surface)',
+  border: '2px solid var(--ink)',
+  borderRadius: 0,
   cursor: 'pointer',
   fontSize: '0.85rem',
   transition: 'all 0.3s',
+  fontFamily: "'DM Mono', monospace",
 }

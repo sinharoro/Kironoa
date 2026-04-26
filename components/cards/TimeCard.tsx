@@ -22,10 +22,16 @@ export default function TimeCard() {
 
   return (
     <>
-      <div className="card time-card" style={{ gridColumn: 'span 2' }} onClick={() => setOpen(true)}>
-        <h1 id="clock" style={{ fontSize: '2.5rem', fontWeight: 700, letterSpacing: '-1px' }}>{time}</h1>
-        <div style={{ opacity: 0.7, fontSize: '0.9rem', marginTop: 4 }}>{date}</div>
-        <div style={{ fontSize: '0.75rem', opacity: 0.4, marginTop: 8 }}>Click to open calendar</div>
+      <div 
+        className="glass-card time-card p-6 sm:p-8 flex flex-col items-center justify-center text-center min-h-[180px] cursor-pointer" 
+        onClick={() => setOpen(true)}
+      >
+        <span className="font-mono text-xs tracking-[0.2em] uppercase opacity-50">LOCAL TIME · PH</span>
+        <h1 className="font-mono text-3xl sm:text-4xl font-medium tracking-tight text-orange-400 my-3">
+          {time}
+        </h1>
+        <p className="font-mono text-sm opacity-60">{date}</p>
+        <p className="font-mono text-xs opacity-40 mt-4">Click to open calendar</p>
       </div>
 
       {open && (

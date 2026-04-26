@@ -19,7 +19,6 @@ export default function GameCard() {
     }
   }
 
-  // Close on Escape
   useEffect(() => {
     if (!open) return
     const handler = (e: KeyboardEvent) => {
@@ -31,17 +30,17 @@ export default function GameCard() {
 
   return (
     <>
-      <div className="si-launcher-card" onClick={openGame}>
-        <h3 style={{ fontSize: '1.1rem', marginBottom: 4 }}>🚀 Play</h3>
-        <p style={{ fontSize: '0.85rem', opacity: 0.6 }}>Click to launch game</p>
+      <div className="glass-card p-6 sm:p-8 flex flex-col items-center justify-center text-center cursor-pointer" onClick={openGame}>
+        <h3 className="font-semibold text-lg mb-1">🚀 Play</h3>
+        <p className="text-sm opacity-60">Click to launch game</p>
       </div>
 
-      <div className={`si-modal-overlay ${open ? 'active' : ''}`}>
-        <div className="si-game-wrapper">
-          <span className="si-close-btn" onClick={closeGame}>&times;</span>
+      <div className={`fixed inset-0 z-[10000] bg-black/90 flex items-center justify-center ${open ? 'block' : 'hidden'}`}>
+        <div className="relative border-2 border-orange-500 p-2 rounded-2xl">
+          <button onClick={closeGame} className="absolute -top-12 right-0 text-orange-500 text-3xl hover:text-white">&times;</button>
           <iframe
             ref={iframeRef}
-            className="si-game-frame"
+            className="w-[850px] max-w-[95vw] aspect-video rounded-xl"
             src={open ? '/games/SI.html' : 'about:blank'}
             scrolling="no"
             allow="fullscreen"
