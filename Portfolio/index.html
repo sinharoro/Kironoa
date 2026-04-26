@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kironoa | Portfolio</title>
+    <link rel="icon" type="image/png" href="MyLogo.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
+</head>
+
+<body>
+
+    <div class="cursor-follower"></div>
+
+    <section id="bento-section">
+<div class="top-nav">
+    <div class="logo-btn" onclick="toggleLogin()">
+        <img src="MyLogo.png" alt="KR">
+    </div>
+
+    <button class="theme-toggle" id="themeBtn" onclick="toggleTheme()">
+        ☀️ Light Mode
+    </button>
+    
+    <div class="login-popup" id="loginForm">
+        <div class="card2">
+            <form class="form">
+            <p id="heading">Login</p>
+            <div class="field">
+                <svg
+                    viewBox="0 0 16 16"
+                    fill="currentColor"
+                    height="16"
+                    width="16"
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="input-icon">
+                <path d="M13.106 7.222c0-2.967-2.249-5.032-5.482-5.032-3.35 0-5.646 2.318-5.646 5.702 0 3.493 2.235 5.708 5.762 5.708.862 0 1.689-.123 2.304-.335v-.862c-.43.199-1.354.328-2.29.328-2.926 0-4.813-1.88-4.813-4.798 0-2.844 1.921-4.881 4.594-4.881 2.735 0 4.608 1.688 4.608 4.156 0 1.682-.554 2.769-1.416 2.769-.492 0-.772-.28-.772-.76V5.206H8.923v.834h-.11c-.266-.595-.881-.964-1.6-.964-1.4 0-2.378 1.162-2.378 2.823 0 1.737.957 2.906 2.379 2.906.8 0 1.415-.39 1.709-1.087h.11c.081.67.703 1.148 1.503 1.148 1.572 0 2.57-1.415 2.57-3.643zm-7.177.704c0-1.197.54-1.907 1.456-1.907.93 0 1.524.738 1.524 1.907S8.308 9.84 7.371 9.84c-.895 0-1.442-.725-1.442-1.914z"></path>
+                </svg>
+                <input
+                    type="email"
+                    id="loginEmail"
+                    class="input-field"
+                    placeholder="Email"
+                    autocomplete="off"/>
+            </div>
+            <div class="field">
+                <svg
+                    viewBox="0 0 16 16"
+                    fill="currentColor"
+                    height="16"
+                    width="16"
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="input-icon">
+                <path d="M8 1a2 2 0 0 1 2 2v4H6V3a2 2 0 0 1 2-2zm3 6V3a3 3 0 0 0-6 0v4a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"></path>
+                </svg>
+                <input type="password" id="loginPass" class="input-field" placeholder="Password" />
+            </div>
+            <div class="btn">
+                <button type="button" id="btnLogin" class="button1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Login&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</button>
+            </div>
+            </form>
+            </div>
+        </div>
+    </div>    
+    <div id="calendar-login-modal" class="login-popup centered-popup">
+  <div class="card2">
+    <div class="form">
+      <p id="heading">Sign in to save this note</p>
+      
+      <div class="field">
+        <svg class="input-icon" viewBox="0 0 16 16"><path d="M13.106 7.222c0-2.967-2.249-5.332-5.082-5.332-2.834 0-5.11 2.365-5.11 5.332 0 1.164.363 2.238 1.013 3.126L2.892 14h10.216l-1.031-3.652c.65-.888 1.03-1.962 1.03-3.126z"/></svg>
+        <input placeholder="Email" class="input-field" type="email" id="cal-email" autocomplete="off" >
+      </div>
+
+      <div class="field">
+        <svg class="input-icon" viewBox="0 0 16 16"><path d="M8 1a2 2 0 0 1 2 2v4H6V3a2 2 0 0 1 2-2zm3 6V3a3 3 0 0 0-6 0v4a2 2 0 0 0-2 2v4a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"/></svg>
+        <input placeholder="Password" class="input-field" type="password" id="cal-password">
+      </div>
+
+      <div class="btn">
+        <button type="button" class="button1" onclick="handleCalendarLogin()">Sign In & Save</button>
+        <button type="button" class="button1" onclick="closeCalendarLogin()">Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>
+    
+        <main class="bento-container">
+            <div class="time-card-wrapper" style="grid-column: span 2;">
+    <section class="card time-card" data-id="1" onclick="openModal(this)">
+        <h1 id="clock">00:00:00</h1>
+        <div id="date">Loading date...</div>
+        <div class="modal-hidden-content">
+    <div class="calendar-modal-layout">
+        <div class="calendar-container">
+            <div class="calendar-header">
+                <h2 id="calendar-month-year">Calendar</h2>
+                <div class="calendar-nav">
+                    <button class="nav-btn" onclick="changeMonth(-1)">❮</button>
+                    <button class="nav-btn" onclick="changeMonth(1)">❯</button>
+                </div>
+            </div>
+            <div class="calendar-weekdays">
+                <div>S</div><div>M</div><div>T</div><div>W</div><div>T</div><div>F</div><div>S</div>
+            </div>
+            <div id="calendar-days" class="calendar-grid"></div>
+        </div>
+
+        <div class="day-notes-panel">
+            <div class="notes-header">
+                <span id="selected-date-label">Select a date</span>
+            </div>
+            <div class="notes-content">
+                <div class="empty-state">
+                    <i class="fa-regular fa-calendar-check"></i>
+                    <p>No events scheduled</p>
+                </div>
+                <textarea id="day-notes-input" placeholder="Add a note for this day..."></textarea>
+                <button id="save-note-btn" onclick="saveNote()" class="save-note-btn">Save Note</button>
+            </div>
+        </div>
+    </div>
+</div>
+    </section>
+</div>
+
+            <section class="card profile-card" data-id="2" onclick="openModal(this)">
+                <div class="profile-pic-container">
+                    <img src="nge.jpg" alt="Kironoa Roro" class="profile-img">
+                </div>
+                <div class="profile-info">
+                    <h2><b>Kironoa Roro</b></h2>
+                    <p>Bachelor of Science in Computer Science Student</p>
+                    <span class="badge">Open to Work</span>
+                </div>
+                <div class="modal-hidden-content">
+                    <img src="mwemwe.jpg" class="hidden-modal-pic">
+                    <span class="hidden-modal-name">Rolando F. Lobido Jr.</span>
+                    <h3>Bio</h3>
+                    <p>Vibe coder who learns by doing and experimenting</p>
+                </div>
+            </section>
+
+            <section class="card status-card" data-id="3" onclick="openModal(this)">
+                <div class="status-indicator">
+                    <span class="dot"></span>
+                    <span id="current-status">Thinking about code...</span>
+                </div>
+                <h3>Current Focus</h3>
+                <p>Making Portfolio and Mobile Application</p>
+                <div class="modal-hidden-content">
+                    <p>List of things I want to try:</p>
+                        <ul>
+                            <li>Build a Space Impact clone</li>
+                            <li>Master Glassmorphism UI</li>
+                            <li>Build a Remote Control Using Mobile Phone</li>
+                            <li>Mastering Design</li>
+                        </ul>
+                </div>
+            </section>
+
+            <section class="card project-card web" data-id="4" onclick="openModal(this)">
+                <h2>Harmony App</h2>
+                <p>A mindfulness tool for busy creators.</p>
+                <div class="seasons-container">
+                    <div class="season-quadrant spring" onclick="event.stopPropagation(); playSeason('spring')">
+                        <span class="kanji">春</span>
+                        <span class="label">Spring</span>
+                    </div>
+                    <div class="season-quadrant summer" onclick="event.stopPropagation(); playSeason('summer')">
+                        <span class="kanji">夏</span>
+                        <span class="label">Summer</span>
+                    </div>
+                    <div class="season-quadrant autumn" onclick="event.stopPropagation(); playSeason('autumn')">
+                        <span class="kanji">秋</span>
+                        <span class="label">Autumn</span>
+                    </div>
+                    <div class="season-quadrant winter" onclick="event.stopPropagation(); playSeason('winter')">
+                        <span class="kanji">冬</span>
+                        <span class="label">Winter</span>
+                    </div>
+                </div>
+                <p class="cta">Click on a season to play a sound</p>
+                <div class="modal-hidden-content">
+                    <img src="4seasons.png" class="hidden-modal-pic">
+                    <span class="hidden-modal-name">Meditation</span>
+                    <h3>Project Details</h3>
+                    <p>The app serves as a digital escape for users who are overwhelmed. By providing curated sounds based on the four seasons, it allows users to engage in brief "micro-meditations" or grounding exercises during a busy workday.</p>
+                </div>
+            </section>
+
+            <section class="card contact-card" data-id="5">
+                <h2>Send Noodles</h2>
+                <form id="contactForm">
+                    <input type="text" id="contactNickname" placeholder="Your nickname...">
+                    <div class="messageBox-container">
+                        <div id="filePreviewContainer" class="file-preview-grid"></div>
+                        <div class="messageBox">
+                            <div class="fileUploadWrapper">
+                                <label for="portfolio-file-upload" id="uploadLabel">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 337 337">
+                                        <circle stroke-width="20" stroke="currentColor" fill="none" r="158.5" cy="168.5" cx="168.5"></circle>
+                                        <path stroke-linecap="round" stroke-width="25" stroke="currentColor" d="M167.759 79V259"></path>
+                                        <path stroke-linecap="round" stroke-width="25" stroke="currentColor" d="M79 167.138H259"></path>
+                                    </svg>
+                                </label>
+                                <input type="file" id="portfolio-file-upload" multiple hidden />
+                            </div>
+                            <textarea required placeholder="Message..." id="contactMessage" rows="1"></textarea>
+                            <button type="submit" id="submitBtn" class="send-icon-btn">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 664 663">
+                                    <path stroke-linejoin="round" stroke-linecap="round" stroke-width="33.67" stroke="currentColor" d="M646.293 331.888L17.7538 17.6187L155.245 331.888M646.293 331.888L17.753 646.157L155.245 331.888M646.293 331.888L318.735 330.228L155.245 331.888"></path>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </section>
+
+            <section class="card skills-card" data-id="6" onclick="openModal(this)">
+                <h3><b>Reminder</b></h3>
+                <p>You can click and drag the cards.</p>
+                <div class="modal-hidden-content">
+                    <p>mwemwe</p>
+                </div>
+            </section>
+
+<div class="si-launcher-card" onclick="startGame()">
+    <h3>🚀 Play</h3>
+    <p>Click to launch game</p>
+</div>
+
+<div id="siModal" class="si-modal-overlay">
+    <div class="si-game-wrapper">
+        <span class="si-close-btn" onclick="closeGame()">&times;</span>
+        <iframe 
+    class="si-game-frame" 
+    id="gameIframe" 
+    src="Space Impact/SI.html" 
+    scrolling="no" 
+    loading="lazy" 
+    allow="fullscreen" 
+    allowfullscreen
+    width="850" 
+    height="450">
+        </iframe>
+    </div>
+</div>
+
+            <section class="card music-card" data-id="7" onclick="openModal(this)">
+                <div class="music-header">
+                    <span class="now-playing-label">FAVORITE TRACK</span>
+                    <div class="music-icon">🎵</div>
+                </div>
+                <div class="static-music-content">
+                    <img src="Keshi.png" alt="Album Art" class="album-art">
+                    <div class="music-info">
+                        <h4 id="song-title">Soft Spot</h4>
+                        <p id="artist-name">Keshi</p>
+                        <a href="https://music.youtube.com/watch?v=vZ0Iogdip40&list=PLIhpR5wyILIkcwGLli4KKxoKUY9HIKZlT" target="_blank" class="play-link" onclick="event.stopPropagation()">
+                            <button class="button"><span>Play</span></button>
+                        </a>
+                    </div>
+                </div>
+                <div class="modal-hidden-content">
+    <div class="music-modal-layout">
+        <div class="music-details">
+            <div class="track-badge">Currently Obsessed</div>
+            <h2 class="track-title">Soft Spot</h2>
+            <h4 class="artist-name">Keshi</h4>
+            
+            <div class="divider"></div>
+            
+            <div class="description-box">
+                <p>"Soft Spot" is a staple in my coding playlist. It provides the perfect lo-fi energy for deep focus sessions, blending smooth vocals with a nostalgic beat.</p>
+            </div>
+
+            <div class="player-controls">
+                <span class="control-btn">⏮</span>
+                <span class="control-btn play">⏸</span>
+                <span class="control-btn">⏭</span>
+                <div class="progress-bar-container">
+                    <div class="progress-bar"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="music-visual-side">
+            <img src="Keshi.png" alt="Album Art" class="large-album-art">
+        </div>
+    </div>
+</div>
+</div>
+            </section>
+        </main>
+    </section>
+
+    <section id="skills-section">
+        <h2 class="section-title">Technical Arsenal</h2>
+        <div class="skills-grid">
+            <div class="skill-category">
+                <span class="tag">Frontend</span>
+                <div class="skill-list">
+                    <div class="skill-item">HTML5</div>
+                    <div class="skill-item">CSS3</div>
+                    <div class="skill-item">JavaScript</div>
+                    <div class="skill-item">.Net MAUI</div>
+                    <div class="skill-item">ASP.NET</div>
+                </div>
+            </div>
+            <div class="skill-category">
+                <span class="tag">Backend</span>
+                <div class="skill-list">
+                    <div class="skill-item">Supabase</div>
+                    <div class="skill-item">SQLite</div>
+                </div>
+            </div>
+            <div class="skill-category">
+                <span class="tag">Design & Tools</span>
+                <div class="skill-list">
+                    <div class="skill-item">Figma</div>
+                    <div class="skill-item">Gemini</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="certificates-section">
+        <h2 class="section-title">Verified Achievements</h2>
+        <div class="cert-bento-grid">
+            <div class="cert-card wide">
+                <div class="cert-content">
+                    <span class="tag">Technical</span>
+                    <h3>Newbie pa ngani...</h3>
+                    <p>Issued by Google • 2024</p>
+                </div>
+                <div class="cert-preview">
+                    <img src="" alt="Certificate">
+                </div>
+            </div>
+            <div class="cert-card small">
+                <div class="cert-content">
+                    <span class="tag">Design</span>
+                    <h3>UI/UX Mastery</h3>
+                    <p>Coursera</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="projects-section">
+        <h2 class="section-title">Selected Works</h2>
+        <div class="projects-gallery">
+            <section id="project1" class="project-trigger" onclick="openProjectShowcase('student-pal')">
+    <div class="project-showcase-card">
+        <div class="project-image">
+            <img src="Student Pal/SPpreview.jpg" alt="Student Pal">
+        </div>
+        <div class="project-details">
+            <span class="tag">Mobile App</span>
+            <h3>Student Pal</h3>
+            <p>My very first project... a cross-platform mobile application designed to help students stay focused.</p>
+            <div class="project-links">
+                <span class="view-btn">View Case Study</span>
+                <a href="https://Google.com" class="github-icon" onclick="event.stopPropagation()">Code ↗</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div id="project-overlay" class="project-glass-modal" onclick="closeProjectShowcase()">
+    <div class="project-glass-content" onclick="event.stopPropagation()">
+        <button class="close-project-btn" onclick="closeProjectShowcase()">&times;</button>
+        <div id="project-showcase-body">
+            </div>
+    </div>
+</div>
+            <section id="projcet2">
+                <div class="project-showcase-card">
+                    <div class="project-image">
+                        <img src="" alt="Nova Dashboard">
+                    </div>
+                    <div class="project-details">
+                        <span class="tag">Web Design</span>
+                        <h3>Nova Dashboard</h3>
+                        <p>A high-performance financial dashboard featuring real-time data visualization and customizable glassmorphism widgets.</p>
+                        <div class="project-links">
+                            <a href="#" class="view-btn">Live Preview</a>
+                            <a href="#" class="github-icon">Code ↗</a>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </section>
+
+    <nav class="floating-nav">
+        <a href="#bento-section" class="nav-item active">Portfolio</a>
+        <a href="#skills-section" class="nav-item">Skills</a>
+        <a href="#certificates-section" class="nav-item">Certificates</a>
+        <a href="#projects-section" class="nav-item">Projects</a>
+        <div class="nav-indicator"></div>
+    </nav>
+
+    <div id="modal-overlay" class="modal-overlay" onclick="closeModal()">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <button class="close-btn" onclick="closeModal()">&times;</button>
+            <div id="modal-body"></div>
+        </div>
+    </div>
+
+<div id="toast-overlay" class="toast-overlay"></div>
+
+<div id="glass-toast" class="glass-toast">
+    <div class="toast-content">
+        <span class="toast-icon">✅</span>
+        <div class="toast-text">
+            <p>Note Saved Successfully!</p>
+            <a href="KRdashboard.html" class="dashboard-link">Enter Dashboard →</a>
+        </div>
+    </div>
+</div>
+
+    <div id="login-alert" class="fixed inset-0 flex items-center justify-center z-[110] hidden bg-slate-900/20 backdrop-blur-md">
+    <div id="login-alert-card" class="bg-white/10 backdrop-blur-2xl border border-white/20 p-8 rounded-3xl shadow-2xl max-w-sm w-full text-center transform transition-all scale-95">
+        <div id="login-alert-icon-bg" class="w-20 h-20 rounded-2xl flex items-center justify-center mx-auto mb-6 border transition-all">
+            <i id="login-alert-icon" class="fa-solid text-3xl"></i>
+        </div>
+        <h3 id="login-alert-title" class="text-2xl font-bold text-white mb-2 tracking-tight">Login Update</h3>
+        <p id="login-alert-message" class="text-slate-200 mb-8 text-sm px-4">Redirecting to your personal dashboard...</p>
+        <button onclick="closeLoginAlert()" class="w-full py-3 bg-white/10 hover:bg-white/20 text-white rounded-xl font-semibold transition-all border border-white/20 backdrop-blur-sm shadow-lg">
+            Acknowledge
+        </button>
+    </div>
+</div>
+
+    <div id="success-alert" class="glass-alert">
+        <span>✨ Message sent successfully!</span>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="script.js"></script>
+</body>
+
+</html>
