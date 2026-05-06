@@ -1,18 +1,17 @@
 window.focus();
 
 // --- Supabase Configuration ---
-// Using placeholder values - the game works offline without Supabase
-let supabaseClient = null;
-try {
-    // Attempt to initialize Supabase if available
-    if (typeof supabase !== 'undefined' && supabase) {
-        supabaseClient = supabase.createClient(
-            'https://your-project.supabase.co',
-            'your_anon_key_here'
-        );
-    }
-} catch(e) {
-    console.warn('Supabase not available, leaderboard disabled');
+// TODO: Replace with actual Supabase URL and key from .env.local
+const SUPABASE_URL = 'https://your-project.supabase.co'
+const SUPABASE_ANON_KEY = 'your_anon_key_here'
+
+let supabaseClient = null
+if (typeof supabase !== 'undefined' && SUPABASE_URL.startsWith('https://') && !SUPABASE_URL.includes('your-project')) {
+  try {
+    supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
+  } catch (e) {
+    console.warn('Supabase not available, leaderboard disabled')
+  }
 }
 
 // --- Canvas Setup ---

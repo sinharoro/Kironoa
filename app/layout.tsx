@@ -1,20 +1,20 @@
 import type { Metadata } from 'next'
-import { Inter } from 'next/font/google'
+import { Playfair_Display, Inter } from 'next/font/google'
 import './globals.css'
-import CommandPalette from '@/components/ui/CommandPalette'
-import LiquidMesh from '@/components/ui/LiquidMesh'
 
-const inter = Inter({
+const playfair = Playfair_Display({ 
   subsets: ['latin'],
-  weight: ['300', '400', '500', '600', '700'],
-  variable: '--font-inter',
-  display: 'swap',
+  variable: '--font-playfair'
+})
+
+const inter = Inter({ 
+  subsets: ['latin'],
+  variable: '--font-inter'
 })
 
 export const metadata: Metadata = {
-  title: 'Kironoa | Portfolio',
-  description: 'Kironoa Roro – BSCS student, vibe coder, and creator.',
-  icons: { icon: '/images/MyLogo.png' },
+  title: 'Portfolio | Creative Professional',
+  description: 'A modern, elegant personal portfolio showcasing creative work',
 }
 
 export default function RootLayout({
@@ -23,12 +23,8 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" data-theme="dark" className={inter.variable}>
-      <body className="font-sans">
-        <LiquidMesh />
-        {children}
-        <CommandPalette />
-      </body>
+    <html lang="en" className={`${playfair.variable} ${inter.variable}`}>
+      <body>{children}</body>
     </html>
   )
 }
