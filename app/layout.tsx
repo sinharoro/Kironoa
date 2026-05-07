@@ -1,11 +1,6 @@
 import type { Metadata } from 'next'
-import { Playfair_Display, Inter } from 'next/font/google'
+import { Inter } from 'next/font/google'
 import './globals.css'
-
-const playfair = Playfair_Display({ 
-  subsets: ['latin'],
-  variable: '--font-playfair'
-})
 
 const inter = Inter({ 
   subsets: ['latin'],
@@ -13,8 +8,8 @@ const inter = Inter({
 })
 
 export const metadata: Metadata = {
-  title: 'Portfolio | Creative Professional',
-  description: 'A modern, elegant personal portfolio showcasing creative work',
+  title: 'Portfolio | Kiro',
+  description: 'A high-performance personal portfolio',
 }
 
 export default function RootLayout({
@@ -23,8 +18,11 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" className={`${playfair.variable} ${inter.variable}`}>
-      <body>{children}</body>
+    <html lang="en" className={inter.variable}>
+      <body>
+        {children}
+        <div className="noise-overlay" />
+      </body>
     </html>
   )
 }
