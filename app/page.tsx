@@ -8,6 +8,12 @@ const aboutBio = `Crafting digital experiences with precision and intention. Bas
 
 const projects = [
   {
+    title: 'Space Impact: Ultra Edition',
+    category: 'Game',
+    year: '2024',
+    link: '/games/SI.html',
+  },
+  {
     title: 'Brand Identity',
     category: 'Design',
     year: '2024',
@@ -243,7 +249,7 @@ function HeroSection({ theme }: { theme: string }) {
   const y = useTransform(scrollY, [0, 500], [0, 100])
   const opacity = useTransform(scrollY, [0, 300], [1, 0])
 
-  return (
+return (
     <section
       id="home"
       style={{
@@ -251,17 +257,17 @@ function HeroSection({ theme }: { theme: string }) {
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'center',
-        padding: '6rem 6em',
+        padding: 'clamp(3rem, 10vh, 6rem) clamp(1.5rem, 5vw, 6em)',
         position: 'relative',
         overflow: 'hidden',
       }}
     >
       <motion.div style={{ y, opacity }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '3rem', marginBottom: '2rem' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 'clamp(1.5rem, 3vw, 3rem)', marginBottom: '2rem' }}>
           <img 
             src="/images/minilogoKR.png" 
             alt="Kironoa Logo" 
-            style={{ width: '80px', height: '80px', objectFit: 'contain' }}
+            style={{ width: 'clamp(50px, 10vw, 80px)', height: 'clamp(50px, 10vw, 80px)', objectFit: 'contain' }}
           />
           <TextReveal>
             <motion.p
@@ -269,7 +275,7 @@ function HeroSection({ theme }: { theme: string }) {
               animate={{ opacity: 1 }}
               transition={{ delay: 0.2, duration: 0.6 }}
               style={{
-                fontSize: '0.875rem',
+                fontSize: 'clamp(0.7rem, 1.5vw, 0.875rem)',
                 letterSpacing: '0.3em',
                 textTransform: 'uppercase',
                 color: 'var(--color-accent)',
@@ -283,7 +289,7 @@ function HeroSection({ theme }: { theme: string }) {
         <div style={{ overflow: 'hidden', marginBottom: '0.5rem' }}>
           <TextReveal delay={0.1}>
             <h1 style={{
-              fontSize: 'clamp(4rem, 12vw, 10rem)',
+              fontSize: 'clamp(2.5rem, 8vw, 10rem)',
               color: 'var(--color-text)',
               margin: 0,
               lineHeight: 0.9,
@@ -293,10 +299,10 @@ function HeroSection({ theme }: { theme: string }) {
           </TextReveal>
         </div>
 
-        <div style={{ overflow: 'hidden', marginBottom: '2rem' }}>
+        <div style={{ overflow: 'hidden', marginBottom: 'clamp(1rem, 3vw, 2rem)' }}>
           <TextReveal delay={0.2}>
             <h1 style={{
-              fontSize: 'clamp(4rem, 12vw, 10rem)',
+              fontSize: 'clamp(2.5rem, 8vw, 10rem)',
               color: 'var(--color-text)',
               margin: 0,
               lineHeight: 0.9,
@@ -308,16 +314,16 @@ function HeroSection({ theme }: { theme: string }) {
 
         <TextReveal delay={0.3}>
           <p style={{
-            fontSize: '1.25rem',
+            fontSize: 'clamp(0.9rem, 2vw, 1.25rem)',
             color: 'var(--color-text-muted)',
-            maxWidth: '400px',
+            maxWidth: 'clamp(250px, 50vw, 400px)',
             lineHeight: 1.6,
           }}>
             {aboutBio}
           </p>
         </TextReveal>
 
-        <div style={{ marginTop: '3rem' }}>
+        <div style={{ marginTop: 'clamp(2rem, 5vw, 3rem)' }}>
           <TextReveal delay={0.4}>
             <MagneticButton>View Work</MagneticButton>
           </TextReveal>
@@ -327,9 +333,10 @@ function HeroSection({ theme }: { theme: string }) {
       <motion.div
         style={{
           position: 'absolute',
-          right: '5rem',
+          right: 'clamp(0, 0, 5rem)',
           top: '50%',
           transform: 'translateY(-50%)',
+          marginTop: 'clamp(2rem, 5vw, 0)',
         }}
       >
         <div
@@ -338,13 +345,13 @@ function HeroSection({ theme }: { theme: string }) {
             top: '50%',
             left: '50%',
             transform: 'translate(-50%, -50%)',
-            width: '350px',
-            height: '350px',
+            width: 'clamp(200px, 40vw, 350px)',
+            height: 'clamp(200px, 40vw, 350px)',
             background: 'radial-gradient(circle, rgba(0, 245, 160, 0.1) 0%, transparent 70%)',
             borderRadius: '50%',
           }}
         />
-<div className="profile-container" style={{ position: 'relative', width: '300px', height: '300px' }}>
+<div className="profile-container" style={{ position: 'relative', width: 'clamp(180px, 35vw, 300px)', height: 'clamp(180px, 35vw, 300px)', margin: '0 auto' }}>
           <img 
             src={theme === 'dark' ? '/images/Kironoa.png' : '/images/KironoaL.png'} 
             alt="Kironoa Roro" 
@@ -355,6 +362,7 @@ function HeroSection({ theme }: { theme: string }) {
               borderRadius: '50%',
               border: '1px solid var(--color-border)',
               opacity: 1,
+              display: 'block',
             }}
           />
         </div>
@@ -365,7 +373,7 @@ function HeroSection({ theme }: { theme: string }) {
 
 function AboutSection() {
   return (
-    <section id="about" style={{ padding: '8rem 6em' }}>
+    <section id="about" style={{ padding: 'clamp(3rem, 8vh, 8rem) clamp(1.5rem, 5vw, 6em)' }}>
       <div className="container">
         <TextReveal>
           <h2 className="section-title">About</h2>
@@ -405,7 +413,7 @@ function AboutSection() {
 
 function ProjectsSection() {
   return (
-    <section id="projects" style={{ padding: '8rem 6em', background: 'var(--color-bg-alt)' }}>
+    <section id="projects" style={{ padding: 'clamp(3rem, 8vh, 8rem) clamp(1.5rem, 5vw, 6em)', background: 'var(--color-bg-alt)' }}>
       <div className="container">
         <TextReveal>
           <h2 className="section-title">Projects</h2>
@@ -417,7 +425,23 @@ function ProjectsSection() {
           gap: '1.5rem',
         }}>
           {projects.map((project, index) => (
-            <BentoBox key={project.title}>
+            <motion.div
+              key={project.title}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }}
+              viewport={{ once: true, margin: '-50px' }}
+              whileHover={{ boxShadow: '0 0 20px rgba(0, 245, 160, 0.05)' }}
+              onClick={() => project.link && window.open(project.link, '_blank')}
+              style={{
+                border: '1px solid var(--color-border)',
+                borderRadius: '8px',
+                padding: '2rem',
+                background: 'var(--color-bg-alt)',
+                transition: 'border-color 0.3s, box-shadow 0.3s',
+                cursor: project.link ? 'pointer' : 'default',
+              }}
+            >
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
                 <span style={{ 
                   fontSize: '0.75rem', 
@@ -434,7 +458,7 @@ function ProjectsSection() {
               <h3 style={{ fontSize: '2rem', fontWeight: 700, marginBottom: '0.5rem' }}>
                 {project.title}
               </h3>
-            </BentoBox>
+            </motion.div>
           ))}
         </div>
       </div>
@@ -444,7 +468,7 @@ function ProjectsSection() {
 
 function SkillsSection() {
   return (
-    <section id="skills" style={{ padding: '8rem 6em' }}>
+    <section id="skills" style={{ padding: 'clamp(3rem, 8vh, 8rem) clamp(1.5rem, 5vw, 6em)' }}>
       <div className="container">
         <TextReveal>
           <h2 className="section-title">Skills</h2>
@@ -488,7 +512,7 @@ function SkillsSection() {
 
 function ExperienceSection() {
   return (
-    <section id="experience" style={{ padding: '8rem 6em', background: 'var(--color-bg-alt)' }}>
+    <section id="experience" style={{ padding: 'clamp(3rem, 8vh, 8rem) clamp(1.5rem, 5vw, 6em)', background: 'var(--color-bg-alt)' }}>
       <div className="container">
         <TextReveal>
           <h2 className="section-title">Experience</h2>
@@ -512,7 +536,7 @@ function ExperienceSection() {
 
 function ContactSection() {
   return (
-    <section id="contact" style={{ padding: '8rem 6em' }}>
+    <section id="contact" style={{ padding: 'clamp(3rem, 8vh, 8rem) clamp(1.5rem, 5vw, 6em)' }}>
       <div className="container">
         <TextReveal>
           <h2 className="section-title">Contact</h2>
@@ -645,12 +669,12 @@ function FloatingNav() {
   return (
     <nav style={{
       position: 'fixed',
-      bottom: '2rem',
+      bottom: 'clamp(0.5rem, 2vw, 2rem)',
       left: '50%',
       transform: 'translateX(-50%)',
       display: 'flex',
-      gap: '0.25rem',
-      padding: '0.5rem',
+      gap: 'clamp(0.1rem, 1vw, 0.25rem)',
+      padding: 'clamp(0.3rem, 1vw, 0.5rem)',
       background: 'rgba(8, 12, 11, 0.4)',
       border: '1px solid var(--color-border)',
       borderRadius: '50px',
@@ -658,6 +682,9 @@ function FloatingNav() {
       zIndex: 100,
       opacity: 0.7,
       transition: 'opacity 0.3s ease',
+      flexWrap: 'wrap',
+      justifyContent: 'center',
+      maxWidth: 'calc(100vw - 2rem)',
     }}
     onMouseEnter={(e) => {
       e.currentTarget.style.opacity = '1'
@@ -671,16 +698,17 @@ function FloatingNav() {
           key={item.id}
           onClick={() => scrollToSection(item.id)}
           style={{
-            padding: '0.6rem 1.25rem',
+            padding: 'clamp(0.4rem, 1.5vw, 0.6rem) clamp(0.5rem, 2vw, 1.25rem)',
             borderRadius: '50px',
             border: 'none',
             background: 'transparent',
             color: 'rgba(255, 255, 255, 0.5)',
-            fontSize: '0.8rem',
+            fontSize: 'clamp(0.6rem, 2vw, 0.8rem)',
             fontWeight: 500,
             cursor: 'pointer',
             transition: 'all 0.3s ease',
             opacity: 0.7,
+            whiteSpace: 'nowrap',
           }}
           onMouseEnter={(e) => {
             e.currentTarget.style.background = 'var(--color-accent)'
