@@ -249,122 +249,124 @@ function HeroSection({ theme }: { theme: string }) {
   const y = useTransform(scrollY, [0, 500], [0, 100])
   const opacity = useTransform(scrollY, [0, 300], [1, 0])
 
-return (
+  return (
     <section
       id="home"
       style={{
         minHeight: '100vh',
         display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'center',
-        padding: 'clamp(3rem, 10vh, 6rem) clamp(1.5rem, 5vw, 6em)',
+        alignItems: 'center',
+        padding: '0 clamp(3rem, 6vw, 6rem)',
         position: 'relative',
         overflow: 'hidden',
       }}
     >
-      <motion.div style={{ y, opacity }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 'clamp(1.5rem, 3vw, 3rem)', marginBottom: '2rem' }}>
-          <img 
-            src="/images/minilogoKR.png" 
-            alt="Kironoa Logo" 
-            style={{ width: 'clamp(50px, 10vw, 80px)', height: 'clamp(50px, 10vw, 80px)', objectFit: 'contain' }}
-          />
-          <TextReveal>
-            <motion.p
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.2, duration: 0.6 }}
-              style={{
-                fontSize: 'clamp(0.7rem, 1.5vw, 0.875rem)',
-                letterSpacing: '0.3em',
-                textTransform: 'uppercase',
-                color: 'var(--color-accent)',
-              }}
-            >
-              Creative Developer
-            </motion.p>
-          </TextReveal>
-        </div>
+      <motion.div style={{ y, opacity, display: 'flex', width: '100%', alignItems: 'center', gap: 'clamp(2rem, 5vw, 6rem)', position: 'relative', zIndex: 1 }}>
+        <div style={{ flex: 1, minWidth: 0 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 'clamp(1rem, 2vw, 2rem)', marginBottom: '2rem' }}>
+            <img 
+              src="/images/minilogoKR.png" 
+              alt="Kironoa Logo" 
+              style={{ width: 'clamp(40px, 8vw, 70px)', height: 'clamp(40px, 8vw, 70px)', objectFit: 'contain' }}
+            />
+            <TextReveal>
+              <motion.p
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.2, duration: 0.6 }}
+                style={{
+                  fontSize: 'clamp(0.65rem, 1.2vw, 0.875rem)',
+                  letterSpacing: '0.3em',
+                  textTransform: 'uppercase',
+                  color: 'var(--color-accent)',
+                }}
+              >
+                Creative Developer
+              </motion.p>
+            </TextReveal>
+          </div>
 
-        <div style={{ overflow: 'hidden', marginBottom: '0.5rem' }}>
-          <TextReveal delay={0.1}>
-            <h1 style={{
-              fontSize: 'clamp(2.5rem, 8vw, 10rem)',
-              color: 'var(--color-text)',
-              margin: 0,
-              lineHeight: 0.9,
+          <div style={{ overflow: 'hidden', marginBottom: '0.25rem' }}>
+            <TextReveal delay={0.1}>
+              <h1 style={{
+                fontSize: 'clamp(2.5rem, 8vw, 8rem)',
+                color: 'var(--color-text)',
+                margin: 0,
+                lineHeight: 0.9,
+              }}>
+                KIRONOA
+              </h1>
+            </TextReveal>
+          </div>
+
+          <div style={{ overflow: 'hidden', marginBottom: 'clamp(1rem, 2.5vw, 2rem)' }}>
+            <TextReveal delay={0.2}>
+              <h1 style={{
+                fontSize: 'clamp(2.5rem, 8vw, 8rem)',
+                color: 'var(--color-text)',
+                margin: 0,
+                lineHeight: 0.9,
+              }}>
+                RORO
+              </h1>
+            </TextReveal>
+          </div>
+
+          <TextReveal delay={0.3}>
+            <p style={{
+              fontSize: 'clamp(0.85rem, 1.5vw, 1.1rem)',
+              color: 'var(--color-text-muted)',
+              maxWidth: 'clamp(250px, 40vw, 400px)',
+              lineHeight: 1.6,
             }}>
-              KIRONOA
-            </h1>
+              {aboutBio}
+            </p>
           </TextReveal>
+
+          <div style={{ marginTop: 'clamp(1.5rem, 3vw, 2.5rem)' }}>
+            <TextReveal delay={0.4}>
+              <MagneticButton>View Work</MagneticButton>
+            </TextReveal>
+          </div>
         </div>
 
-        <div style={{ overflow: 'hidden', marginBottom: 'clamp(1rem, 3vw, 2rem)' }}>
-          <TextReveal delay={0.2}>
-            <h1 style={{
-              fontSize: 'clamp(2.5rem, 8vw, 10rem)',
-              color: 'var(--color-text)',
-              margin: 0,
-              lineHeight: 0.9,
-            }}>
-              RORO
-            </h1>
-          </TextReveal>
-        </div>
-
-        <TextReveal delay={0.3}>
-          <p style={{
-            fontSize: 'clamp(0.9rem, 2vw, 1.25rem)',
-            color: 'var(--color-text-muted)',
-            maxWidth: 'clamp(250px, 50vw, 400px)',
-            lineHeight: 1.6,
+        <div style={{ 
+          flex: '0 0 auto',
+          display: 'flex',
+          justifyContent: 'flex-end',
+          alignItems: 'center',
+          paddingRight: 'clamp(0.5rem, 2vw, 2rem)',
+        }}>
+          <div style={{
+            position: 'relative',
+            width: 'clamp(150px, 20vw, 280px)',
+            height: 'clamp(150px, 20vw, 280px)',
+            flexShrink: 0,
           }}>
-            {aboutBio}
-          </p>
-        </TextReveal>
-
-        <div style={{ marginTop: 'clamp(2rem, 5vw, 3rem)' }}>
-          <TextReveal delay={0.4}>
-            <MagneticButton>View Work</MagneticButton>
-          </TextReveal>
-        </div>
-      </motion.div>
-
-      <motion.div
-        style={{
-          position: 'absolute',
-          right: 'clamp(0, 0, 5rem)',
-          top: '50%',
-          transform: 'translateY(-50%)',
-          marginTop: 'clamp(2rem, 5vw, 0)',
-        }}
-      >
-        <div
-          style={{
-            position: 'absolute',
-            top: '50%',
-            left: '50%',
-            transform: 'translate(-50%, -50%)',
-            width: 'clamp(200px, 40vw, 350px)',
-            height: 'clamp(200px, 40vw, 350px)',
-            background: 'radial-gradient(circle, rgba(0, 245, 160, 0.1) 0%, transparent 70%)',
-            borderRadius: '50%',
-          }}
-        />
-<div className="profile-container" style={{ position: 'relative', width: 'clamp(180px, 35vw, 300px)', height: 'clamp(180px, 35vw, 300px)', margin: '0 auto' }}>
-          <img 
-            src={theme === 'dark' ? '/images/Kironoa.png' : '/images/KironoaL.png'} 
-            alt="Kironoa Roro" 
-            style={{
-              width: '100%',
-              height: '100%',
-              objectFit: 'cover',
-              borderRadius: '50%',
-              border: '1px solid var(--color-border)',
-              opacity: 1,
-              display: 'block',
-            }}
-          />
+            <div
+              style={{
+                position: 'absolute',
+                top: '50%',
+                left: '50%',
+                transform: 'translate(-50%, -50%)',
+                width: '100%',
+                height: '100%',
+                background: 'radial-gradient(circle, rgba(0, 245, 160, 0.12) 0%, transparent 70%)',
+                borderRadius: '50%',
+              }}
+            />
+            <img 
+              src={theme === 'dark' ? '/images/Kironoa.png' : '/images/KironoaL.png'} 
+              alt="Kironoa Roro" 
+              style={{
+                width: '100%',
+                height: '100%',
+                objectFit: 'cover',
+                borderRadius: '50%',
+                border: '1px solid var(--color-border)',
+              }}
+            />
+          </div>
         </div>
       </motion.div>
     </section>
