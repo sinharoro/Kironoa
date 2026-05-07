@@ -237,7 +237,7 @@ function BentoBox({ children, className = '', style }: { children: React.ReactNo
   )
 }
 
-function HeroSection() {
+function HeroSection({ theme }: { theme: string }) {
   const { scrollY } = useScroll()
   const y = useTransform(scrollY, [0, 500], [0, 100])
   const opacity = useTransform(scrollY, [0, 300], [1, 0])
@@ -344,31 +344,15 @@ function HeroSection() {
         />
 <div className="profile-container" style={{ position: 'relative', width: '300px', height: '300px' }}>
           <img 
-            src="/images/nge.jpg" 
-            alt="Kironoa Profile" 
-            style={{
-              position: 'absolute',
-              top: 0,
-              left: 0,
-              width: '100%',
-              height: '100%',
-              objectFit: 'cover',
-              borderRadius: '50%',
-              border: '1px solid var(--color-border)',
-            }}
-          />
-          <img 
-            src="/images/Kironoa.png" 
+            src={theme === 'dark' ? '/images/Kironoa.png' : '/images/KironoaL.png'} 
             alt="Kironoa Roro" 
             style={{
-              position: 'absolute',
-              top: 0,
-              left: 0,
               width: '100%',
               height: '100%',
               objectFit: 'cover',
               borderRadius: '50%',
               border: '1px solid var(--color-border)',
+              opacity: 1,
             }}
           />
         </div>
@@ -714,7 +698,7 @@ export default function Home() {
       <PageTransition>
         <ThemeToggle theme={theme} toggleTheme={toggleTheme} />
         <CustomCursor />
-        <HeroSection />
+        <HeroSection theme={theme} />
         <AboutSection />
         <ProjectsSection />
         <SkillsSection />

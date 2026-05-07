@@ -190,15 +190,6 @@ input, textarea {
   border-color: rgba(0, 245, 160, 0.3);
 }
 
-.profile-container img:last-child {
-  opacity: 0;
-  transition: opacity 0.3s ease;
-}
-
-.profile-container:hover img:last-child {
-  opacity: 1;
-}
-
 .noise-overlay {
   position: fixed;
   top: 0;
