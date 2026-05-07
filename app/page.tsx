@@ -249,7 +249,7 @@ function HeroSection({ theme }: { theme: string }) {
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'center',
-        padding: '6rem 3rem',
+        padding: '6rem 6em',
         position: 'relative',
         overflow: 'hidden',
       }}
@@ -325,7 +325,7 @@ function HeroSection({ theme }: { theme: string }) {
       <motion.div
         style={{
           position: 'absolute',
-          right: '3rem',
+          right: '5rem',
           top: '50%',
           transform: 'translateY(-50%)',
         }}

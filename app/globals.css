@@ -33,6 +33,15 @@
   padding: 0;
 }
 
+::-webkit-scrollbar {
+  display: none;
+}
+
+html {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
 html.lenis {
   height: auto;
 }
@@ -106,7 +115,7 @@ input, textarea {
 .container {
   max-width: 1400px;
   margin: 0 auto;
-  padding: 0 3rem;
+  padding: 0 6em;
 }
 
 .btn {
@@ -238,7 +247,7 @@ input, textarea {
   }
   
   .container {
-    padding: 0 1.5rem;
+    padding: 0 2rem;
   }
   
   .section-title {
