@@ -339,22 +339,10 @@ function HeroSection({ theme }: { theme: string }) {
         }}>
           <div style={{
             position: 'relative',
-            width: 'clamp(150px, 20vw, 280px)',
-            height: 'clamp(150px, 20vw, 280px)',
+            width: 'clamp(180px, 25vw, 320px)',
+            height: 'clamp(180px, 25vw, 320px)',
             flexShrink: 0,
           }}>
-            <div
-              style={{
-                position: 'absolute',
-                top: '50%',
-                left: '50%',
-                transform: 'translate(-50%, -50%)',
-                width: '100%',
-                height: '100%',
-                background: 'radial-gradient(circle, rgba(0, 245, 160, 0.12) 0%, transparent 70%)',
-                borderRadius: '50%',
-              }}
-            />
             <img 
               src={theme === 'dark' ? '/images/Kironoa.png' : '/images/KironoaL.png'} 
               alt="Kironoa Roro" 
