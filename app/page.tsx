@@ -257,8 +257,8 @@ function HeroSection() {
       <motion.div style={{ y, opacity }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '3rem', marginBottom: '2rem' }}>
           <img 
-            src="/images/Kiro.png" 
-            alt="Kiro Logo" 
+            src="/images/minilogoKR.png" 
+            alt="Kironoa Logo" 
             style={{ width: '80px', height: '80px', objectFit: 'contain' }}
           />
           <TextReveal>
@@ -286,7 +286,7 @@ function HeroSection() {
               margin: 0,
               lineHeight: 0.9,
             }}>
-              KIRO
+              KIRONOA
             </h1>
           </TextReveal>
         </div>
@@ -299,7 +299,7 @@ function HeroSection() {
               margin: 0,
               lineHeight: 0.9,
             }}>
-              NAKAMURA
+              RORO
             </h1>
           </TextReveal>
         </div>
@@ -342,17 +342,36 @@ function HeroSection() {
             borderRadius: '50%',
           }}
         />
-        <img 
-          src="/images/Kironoa.png" 
-          alt="Kiro Nakamura Profile" 
-          style={{
-            width: '300px',
-            height: '300px',
-            objectFit: 'cover',
-            borderRadius: '50%',
-            border: '1px solid var(--color-border)',
-          }}
-        />
+<div className="profile-container" style={{ position: 'relative', width: '300px', height: '300px' }}>
+          <img 
+            src="/images/nge.jpg" 
+            alt="Kironoa Profile" 
+            style={{
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              width: '100%',
+              height: '100%',
+              objectFit: 'cover',
+              borderRadius: '50%',
+              border: '1px solid var(--color-border)',
+            }}
+          />
+          <img 
+            src="/images/Kironoa.png" 
+            alt="Kironoa Roro" 
+            style={{
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              width: '100%',
+              height: '100%',
+              objectFit: 'cover',
+              borderRadius: '50%',
+              border: '1px solid var(--color-border)',
+            }}
+          />
+        </div>
       </motion.div>
     </section>
   )
@@ -385,11 +404,11 @@ function AboutSection() {
 
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem', marginTop: '1.5rem' }}>
           <BentoBox>
-            <p style={{ fontSize: '4rem', fontWeight: 800, color: 'var(--color-accent)', marginBottom: '0.5rem' }}>5+</p>
-            <p style={{ fontSize: '0.875rem', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Years Experience</p>
+            <p style={{ fontSize: '4rem', fontWeight: 800, color: 'var(--color-accent)', marginBottom: '0.5rem' }}>2+</p>
+            <p style={{ fontSize: '0.875rem', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Months Experience</p>
           </BentoBox>
           <BentoBox>
-            <p style={{ fontSize: '4rem', fontWeight: 800, color: 'var(--color-accent)', marginBottom: '0.5rem' }}>50+</p>
+            <p style={{ fontSize: '4rem', fontWeight: 800, color: 'var(--color-accent)', marginBottom: '0.5rem' }}>10+</p>
             <p style={{ fontSize: '0.875rem', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Projects Completed</p>
           </BentoBox>
         </div>
@@ -601,7 +620,7 @@ function Footer() {
   return (
     <footer style={{ padding: '3rem', borderTop: '1px solid var(--color-border)', textAlign: 'center' }}>
       <p style={{ fontSize: '0.875rem', color: 'var(--color-text-muted)', letterSpacing: '0.1em' }}>
-        © {new Date().getFullYear()} Kiro Nakamura
+        © {new Date().getFullYear()} Kironoa Roro
       </p>
     </footer>
   )
@@ -620,18 +639,80 @@ function PageTransition({ children }: { children: React.ReactNode }) {
   )
 }
 
+function ThemeToggle({ theme, toggleTheme }: { theme: string; toggleTheme: () => void }) {
+  const [bgIndex, setBgIndex] = useState(0)
+  const backgrounds = ['/images/saogreen.png', '/images/saopurple.png', '/images/saored.png']
+
+  useEffect(() => {
+    if (theme === 'light') {
+      const interval = setInterval(() => {
+        setBgIndex((prev) => (prev + 1) % backgrounds.length)
+      }, 5000)
+      return () => clearInterval(interval)
+    }
+  }, [theme])
+
+  return (
+    <>
+      {theme === 'light' && (
+        <div
+          style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            width: '100%',
+            height: '100%',
+            zIndex: -2,
+            backgroundImage: `url(${backgrounds[bgIndex]})`,
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            transition: 'background-image 1s ease-in-out',
+          }}
+        />
+      )}
+      <button 
+        className="theme-toggle" 
+        onClick={toggleTheme}
+        aria-label="Toggle theme"
+      >
+        {theme === 'dark' ? (
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round"/>
+          </svg>
+        ) : (
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round"/>
+          </svg>
+        )}
+      </button>
+    </>
+  )
+}
+
 export default function Home() {
   const [mounted, setMounted] = useState(false)
+  const [theme, setTheme] = useState('dark')
 
   useEffect(() => {
     setMounted(true)
+    const savedTheme = localStorage.getItem('theme') || 'dark'
+    setTheme(savedTheme)
+    document.documentElement.setAttribute('data-theme', savedTheme)
   }, [])
+
+  const toggleTheme = () => {
+    const newTheme = theme === 'dark' ? 'light' : 'dark'
+    setTheme(newTheme)
+    localStorage.setItem('theme', newTheme)
+    document.documentElement.setAttribute('data-theme', newTheme)
+  }
 
   if (!mounted) return null
 
   return (
     <SmoothScroll>
       <PageTransition>
+        <ThemeToggle theme={theme} toggleTheme={toggleTheme} />
         <CustomCursor />
         <HeroSection />
         <AboutSection />
