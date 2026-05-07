@@ -30,8 +30,9 @@ const projects = [
 ]
 
 const skills = [
-  { name: 'Design', level: 95 },
-  { name: 'Development', level: 90 },
+  { name: 'Imagination', level: 98 },
+  { name: 'Problem solving', level: 100 },
+  { name: 'Adaptability', level: 96 },
   { name: 'Strategy', level: 85 },
 ]
 
@@ -244,6 +245,7 @@ function HeroSection({ theme }: { theme: string }) {
 
   return (
     <section
+      id="home"
       style={{
         minHeight: '100vh',
         display: 'flex',
@@ -363,7 +365,7 @@ function HeroSection({ theme }: { theme: string }) {
 
 function AboutSection() {
   return (
-    <section style={{ padding: '8rem 3rem' }}>
+    <section id="about" style={{ padding: '8rem 6em' }}>
       <div className="container">
         <TextReveal>
           <h2 className="section-title">About</h2>
@@ -403,7 +405,7 @@ function AboutSection() {
 
 function ProjectsSection() {
   return (
-    <section style={{ padding: '8rem 3rem', background: 'var(--color-bg-alt)' }}>
+    <section id="projects" style={{ padding: '8rem 6em', background: 'var(--color-bg-alt)' }}>
       <div className="container">
         <TextReveal>
           <h2 className="section-title">Projects</h2>
@@ -442,7 +444,7 @@ function ProjectsSection() {
 
 function SkillsSection() {
   return (
-    <section style={{ padding: '8rem 3rem' }}>
+    <section id="skills" style={{ padding: '8rem 6em' }}>
       <div className="container">
         <TextReveal>
           <h2 className="section-title">Skills</h2>
@@ -450,7 +452,7 @@ function SkillsSection() {
 
         <div style={{ 
           display: 'grid', 
-          gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', 
+          gridTemplateColumns: 'repeat(3, 1fr)', 
           gap: '1.5rem',
         }}>
           {skills.map((skill, index) => (
@@ -486,7 +488,7 @@ function SkillsSection() {
 
 function ExperienceSection() {
   return (
-    <section style={{ padding: '8rem 3rem', background: 'var(--color-bg-alt)' }}>
+    <section id="experience" style={{ padding: '8rem 6em', background: 'var(--color-bg-alt)' }}>
       <div className="container">
         <TextReveal>
           <h2 className="section-title">Experience</h2>
@@ -510,7 +512,7 @@ function ExperienceSection() {
 
 function ContactSection() {
   return (
-    <section style={{ padding: '8rem 3rem' }}>
+    <section id="contact" style={{ padding: '8rem 6em' }}>
       <div className="container">
         <TextReveal>
           <h2 className="section-title">Contact</h2>
@@ -623,6 +625,81 @@ function PageTransition({ children }: { children: React.ReactNode }) {
   )
 }
 
+const navItems = [
+  { label: 'Home', id: 'home' },
+  { label: 'About', id: 'about' },
+  { label: 'Projects', id: 'projects' },
+  { label: 'Skills', id: 'skills' },
+  { label: 'Experience', id: 'experience' },
+  { label: 'Contact', id: 'contact' },
+]
+
+function FloatingNav() {
+  const scrollToSection = (id: string) => {
+    const element = document.getElementById(id)
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' })
+    }
+  }
+
+  return (
+    <nav style={{
+      position: 'fixed',
+      bottom: '2rem',
+      left: '50%',
+      transform: 'translateX(-50%)',
+      display: 'flex',
+      gap: '0.25rem',
+      padding: '0.5rem',
+      background: 'rgba(8, 12, 11, 0.4)',
+      border: '1px solid var(--color-border)',
+      borderRadius: '50px',
+      backdropFilter: 'blur(10px)',
+      zIndex: 100,
+      opacity: 0.7,
+      transition: 'opacity 0.3s ease',
+    }}
+    onMouseEnter={(e) => {
+      e.currentTarget.style.opacity = '1'
+    }}
+    onMouseLeave={(e) => {
+      e.currentTarget.style.opacity = '0.7'
+    }}
+    >
+      {navItems.map((item) => (
+        <button
+          key={item.id}
+          onClick={() => scrollToSection(item.id)}
+          style={{
+            padding: '0.6rem 1.25rem',
+            borderRadius: '50px',
+            border: 'none',
+            background: 'transparent',
+            color: 'rgba(255, 255, 255, 0.5)',
+            fontSize: '0.8rem',
+            fontWeight: 500,
+            cursor: 'pointer',
+            transition: 'all 0.3s ease',
+            opacity: 0.7,
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.background = 'var(--color-accent)'
+            e.currentTarget.style.color = 'var(--color-bg)'
+            e.currentTarget.style.opacity = '1'
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.background = 'transparent'
+            e.currentTarget.style.color = 'rgba(255, 255, 255, 0.5)'
+            e.currentTarget.style.opacity = '0.7'
+          }}
+        >
+          {item.label}
+        </button>
+      ))}
+    </nav>
+  )
+}
+
 function ThemeToggle({ theme, toggleTheme }: { theme: string; toggleTheme: () => void }) {
   const [bgIndex, setBgIndex] = useState(0)
   const backgrounds = ['/images/saogreen.png', '/images/saopurple.png', '/images/saored.png']
@@ -696,6 +773,7 @@ export default function Home() {
   return (
     <SmoothScroll>
       <PageTransition>
+        <FloatingNav />
         <ThemeToggle theme={theme} toggleTheme={toggleTheme} />
         <CustomCursor />
         <HeroSection theme={theme} />
