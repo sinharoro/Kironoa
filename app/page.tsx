@@ -103,7 +103,7 @@ function CustomCursor() {
         className="cursor-ring"
         style={{
           transform: isHovering ? 'scale(2)' : 'scale(1)',
-          background: isHovering ? 'rgba(255, 77, 0, 0.1)' : 'transparent'
+          background: isHovering ? 'rgba(0, 245, 160, 0.1)' : 'transparent'
         }}
       />
     </>
@@ -221,13 +221,14 @@ function BentoBox({ children, className = '', style }: { children: React.ReactNo
       whileInView={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }}
       viewport={{ once: true, margin: '-50px' }}
+      whileHover={{ boxShadow: '0 0 20px rgba(0, 245, 160, 0.05)' }}
       style={{
         ...style,
         border: '1px solid var(--color-border)',
         borderRadius: '8px',
         padding: '2rem',
         background: 'var(--color-bg-alt)',
-        transition: 'border-color 0.3s',
+        transition: 'border-color 0.3s, box-shadow 0.3s',
       }}
       className={className}
     >
@@ -321,9 +322,20 @@ function HeroSection() {
           right: '3rem',
           top: '50%',
           transform: 'translateY(-50%)',
-          opacity: 0.3,
         }}
       >
+        <div
+          style={{
+            position: 'absolute',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            width: '350px',
+            height: '350px',
+            background: 'radial-gradient(circle, rgba(0, 245, 160, 0.1) 0%, transparent 70%)',
+            borderRadius: '50%',
+          }}
+        />
         <motion.div
           animate={{ rotate: 360 }}
           transition={{ duration: 60, repeat: Infinity, ease: 'linear' }}

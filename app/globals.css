@@ -1,15 +1,15 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
 
 :root {
-  --color-bg: #050505;
-  --color-bg-alt: #0F0F0F;
+  --color-bg: #080C0B;
+  --color-bg-alt: #141F1A;
   --color-bg-overlay: rgba(0, 0, 0, 0.75);
   --color-text: #FFFFFF;
-  --color-text-muted: #B8B8B8;
-  --color-accent: #C9A962;
-  --color-accent-light: #E5D4A1;
-  --color-border: #333333;
-  --color-highlight: #C9A962;
+  --color-text-muted: #BDC7C1;
+  --color-accent: #00F5A0;
+  --color-accent-light: #1B3329;
+  --color-border: rgba(45, 66, 56, 0.4);
+  --color-highlight: #00F5A0;
   --font-sans: 'Inter', system-ui, sans-serif;
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
   --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
@@ -94,7 +94,7 @@ input, textarea {
   align-items: center;
   gap: 0.5rem;
   padding: 1rem 2rem;
-  border: 1px solid var(--color-text);
+  border: 1px solid var(--color-accent);
   border-radius: 4px;
   font-size: 0.875rem;
   font-weight: 600;
@@ -102,6 +102,8 @@ input, textarea {
   text-transform: uppercase;
   transition: all 0.4s var(--ease-out-expo);
   cursor: none;
+  background: var(--color-accent-light);
+  color: var(--color-text);
 }
 
 .btn:hover {
@@ -110,11 +112,34 @@ input, textarea {
   color: var(--color-bg);
 }
 
+.btn-ghost {
+  background: transparent;
+  border: 1px solid var(--color-accent);
+  color: var(--color-accent);
+}
+
+.btn-ghost:hover {
+  background: var(--color-accent);
+  color: var(--color-bg);
+}
+
 .section-title {
   font-size: 2rem;
   margin-bottom: 3rem;
   color: var(--color-text);
   font-weight: 600;
+}
+
+.card {
+  background: var(--color-bg-alt);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  transition: all 0.4s var(--ease-out-expo);
+}
+
+.card:hover {
+  box-shadow: 0 0 20px rgba(0, 245, 160, 0.05);
+  border-color: rgba(0, 245, 160, 0.3);
 }
 
 .noise-overlay {
