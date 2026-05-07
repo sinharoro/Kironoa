@@ -255,22 +255,28 @@ function HeroSection() {
       }}
     >
       <motion.div style={{ y, opacity }}>
-        <TextReveal>
-          <motion.p
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.2, duration: 0.6 }}
-            style={{
-              fontSize: '0.875rem',
-              letterSpacing: '0.3em',
-              textTransform: 'uppercase',
-              color: 'var(--color-accent)',
-              marginBottom: '2rem',
-            }}
-          >
-            Creative Developer
-          </motion.p>
-        </TextReveal>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '3rem', marginBottom: '2rem' }}>
+          <img 
+            src="/images/Kiro.png" 
+            alt="Kiro Logo" 
+            style={{ width: '80px', height: '80px', objectFit: 'contain' }}
+          />
+          <TextReveal>
+            <motion.p
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.2, duration: 0.6 }}
+              style={{
+                fontSize: '0.875rem',
+                letterSpacing: '0.3em',
+                textTransform: 'uppercase',
+                color: 'var(--color-accent)',
+              }}
+            >
+              Creative Developer
+            </motion.p>
+          </TextReveal>
+        </div>
 
         <div style={{ overflow: 'hidden', marginBottom: '0.5rem' }}>
           <TextReveal delay={0.1}>
@@ -336,28 +342,15 @@ function HeroSection() {
             borderRadius: '50%',
           }}
         />
-        <motion.div
-          animate={{ rotate: 360 }}
-          transition={{ duration: 60, repeat: Infinity, ease: 'linear' }}
+        <img 
+          src="/images/Kironoa.png" 
+          alt="Kiro Nakamura Profile" 
           style={{
             width: '300px',
             height: '300px',
+            objectFit: 'cover',
+            borderRadius: '50%',
             border: '1px solid var(--color-border)',
-            borderRadius: '50%',
-          }}
-        />
-        <motion.div
-          animate={{ rotate: -360 }}
-          transition={{ duration: 40, repeat: Infinity, ease: 'linear' }}
-          style={{
-            position: 'absolute',
-            top: '50px',
-            left: '50px',
-            width: '200px',
-            height: '200px',
-            border: '1px solid var(--color-accent)',
-            borderRadius: '50%',
-            opacity: 0.5,
           }}
         />
       </motion.div>
