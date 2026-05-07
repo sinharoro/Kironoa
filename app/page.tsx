@@ -299,20 +299,7 @@ function HeroSection({ theme }: { theme: string }) {
             </TextReveal>
           </div>
 
-          <div style={{ overflow: 'hidden', marginBottom: 'clamp(1rem, 2.5vw, 2rem)' }}>
-            <TextReveal delay={0.2}>
-              <h1 style={{
-                fontSize: 'clamp(2.5rem, 8vw, 8rem)',
-                color: 'var(--color-text)',
-                margin: 0,
-                lineHeight: 0.9,
-              }}>
-                RORO
-              </h1>
-            </TextReveal>
-          </div>
-
-          <TextReveal delay={0.3}>
+          <TextReveal delay={0.2}>
             <p style={{
               fontSize: 'clamp(0.85rem, 1.5vw, 1.1rem)',
               color: 'var(--color-text-muted)',
@@ -641,10 +628,10 @@ function PageTransition({ children }: { children: React.ReactNode }) {
 
 const navItems = [
   { label: 'Home', id: 'home' },
-  { label: 'About', id: 'about' },
   { label: 'Projects', id: 'projects' },
   { label: 'Skills', id: 'skills' },
   { label: 'Experience', id: 'experience' },
+  { label: 'About', id: 'about' },
   { label: 'Contact', id: 'contact' },
 ]
 
@@ -768,15 +755,41 @@ function ThemeToggle({ theme, toggleTheme }: { theme: string; toggleTheme: () =>
   )
 }
 
+function LoadingScreen() {
+  return (
+    <div style={{
+      position: 'fixed',
+      inset: 0,
+      background: '#050505',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      zIndex: 9999,
+    }}>
+      <img 
+        src="/images/one-piece-luffy.gif" 
+        alt="Loading" 
+        style={{
+          width: 'clamp(100px, 30vw, 200px)',
+          height: 'auto',
+        }}
+      />
+    </div>
+  )
+}
+
 export default function Home() {
   const [mounted, setMounted] = useState(false)
   const [theme, setTheme] = useState('dark')
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
+    const timer = setTimeout(() => setLoading(false), 2500)
     setMounted(true)
     const savedTheme = localStorage.getItem('theme') || 'dark'
     setTheme(savedTheme)
     document.documentElement.setAttribute('data-theme', savedTheme)
+    return () => clearTimeout(timer)
   }, [])
 
   const toggleTheme = () => {
@@ -788,6 +801,8 @@ export default function Home() {
 
   if (!mounted) return null
 
+  if (loading) return <LoadingScreen />
+
   return (
     <SmoothScroll>
       <PageTransition>
@@ -795,10 +810,10 @@ export default function Home() {
         <ThemeToggle theme={theme} toggleTheme={toggleTheme} />
         <CustomCursor />
         <HeroSection theme={theme} />
-        <AboutSection />
         <ProjectsSection />
         <SkillsSection />
         <ExperienceSection />
+        <AboutSection />
         <ContactSection />
         <Footer />
       </PageTransition>
