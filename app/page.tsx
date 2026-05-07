@@ -4,7 +4,7 @@ import { useEffect, useRef, useState, useCallback } from 'react'
 import { motion, useScroll, useTransform, useSpring, useInView, AnimatePresence } from 'framer-motion'
 import Lenis from 'lenis'
 
-const aboutBio = `Crafting digital experiences with precision and intention. Based in Tokyo, creating for the world.`
+const aboutBio = `Crafting digital experiences with precision and intention. Based in Misamis Occidental, Philippines.`
 
 const projects = [
   {
@@ -392,7 +392,7 @@ function AboutSection() {
         }}>
           <BentoBox>
             <p style={{ fontSize: '1.125rem', lineHeight: 1.7, color: 'var(--color-text-muted)' }}>
-              Crafting digital experiences with precision and intention. Based in Tokyo, creating for the world.
+              Crafting digital experiences with precision and intention. Based in Misamis Occidental, Philippines.
             </p>
           </BentoBox>
           <BentoBox>
