@@ -60,7 +60,9 @@ function NoiseOverlay() {
 function CustomCursor() {
   const dotRef = useRef<HTMLDivElement>(null)
   const ringRef = useRef<HTMLDivElement>(null)
+  const textRef = useRef<HTMLDivElement>(null)
   const [isHovering, setIsHovering] = useState(false)
+  const [isProjectHover, setIsProjectHover] = useState(false)
   const mousePos = useRef({ x: 0, y: 0 })
   const ringPos = useRef({ x: 0, y: 0 })
 
@@ -71,6 +73,10 @@ function CustomCursor() {
         dotRef.current.style.left = `${e.clientX - 4}px`
         dotRef.current.style.top = `${e.clientY - 4}px`
       }
+      if (textRef.current) {
+        textRef.current.style.left = `${e.clientX + 20}px`
+        textRef.current.style.top = `${e.clientY - 10}px`
+      }
     }
 
     const handleMouseOver = (e: MouseEvent) => {
@@ -78,10 +84,21 @@ function CustomCursor() {
       if (target.tagName === 'A' || target.tagName === 'BUTTON' || target.closest('a') || target.closest('button')) {
         setIsHovering(true)
       }
+      // Check for project card hover
+      if (target.closest('[data-project-card="true"]')) {
+        setIsProjectHover(true)
+      }
     }
 
-    const handleMouseOut = () => {
-      setIsHovering(false)
+    const handleMouseOut = (e: MouseEvent) => {
+      const target = e.target as HTMLElement
+      if (target.tagName === 'A' || target.tagName === 'BUTTON' || target.closest('a') || target.closest('button')) {
+        setIsHovering(false)
+      }
+      // Check for project card mouse out
+      if (target.closest('[data-project-card="true"]')) {
+        setIsProjectHover(false)
+      }
     }
 
     window.addEventListener('mousemove', handleMouseMove)
@@ -89,8 +106,12 @@ function CustomCursor() {
     window.addEventListener('mouseout', handleMouseOut)
 
     const animate = () => {
-      ringPos.current.x += (mousePos.current.x - ringPos.current.x - 20) * 0.15
-      ringPos.current.y += (mousePos.current.y - ringPos.current.y - 20) * 0.15
+      // Different follow speed for project hover (slower = smoother)
+      const speed = isProjectHover ? 0.08 : 0.15
+      const offset = isProjectHover ? 40 : 20
+      
+      ringPos.current.x += (mousePos.current.x - ringPos.current.x - offset) * speed
+      ringPos.current.y += (mousePos.current.y - ringPos.current.y - offset) * speed
       
       if (ringRef.current) {
         ringRef.current.style.left = `${ringPos.current.x}px`
@@ -105,19 +126,44 @@ function CustomCursor() {
       window.removeEventListener('mouseover', handleMouseOver)
       window.removeEventListener('mouseout', handleMouseOut)
     }
-  }, [])
+  }, [isProjectHover])
 
   return (
     <>
-      <div ref={dotRef} className="cursor-dot" />
+      <div ref={dotRef} className="cursor-dot" style={{ opacity: isProjectHover ? 0 : 1 }} />
       <div 
         ref={ringRef} 
         className="cursor-ring"
         style={{
-          transform: isHovering ? 'scale(2)' : 'scale(1)',
-          background: isHovering ? 'rgba(0, 245, 160, 0.1)' : 'transparent'
+          transform: isHovering ? 'scale(2)' : isProjectHover ? 'scale(1)' : 'scale(1)',
+          background: isHovering ? 'rgba(0, 245, 160, 0.1)' : isProjectHover ? 'rgba(0, 245, 160, 0.08)' : 'transparent',
+          borderRadius: isProjectHover ? '6px' : '50%',
+          width: isProjectHover ? '100px' : '40px',
+          height: isProjectHover ? '100px' : '40px',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          border: isProjectHover ? '1.5px solid var(--color-accent)' : '1px solid var(--color-accent)',
         }}
-      />
+      >
+        {isProjectHover && (
+          <span 
+            ref={textRef}
+            style={{
+              color: '#000000',
+              fontSize: '0.65rem',
+              fontWeight: 700,
+              letterSpacing: '0.08em',
+              textTransform: 'uppercase',
+              whiteSpace: 'nowrap',
+              opacity: 0,
+              animation: 'fadeIn 0.2s ease forwards',
+            }}
+          >
+            View Project
+          </span>
+        )}
+      </div>
     </>
   )
 }
@@ -249,7 +295,7 @@ function BentoBox({ children, className = '', style }: { children: React.ReactNo
   )
 }
 
-function HeroSection({ theme }: { theme: string }) {
+function HeroSection({ theme, toggleTheme }: { theme: string; toggleTheme: () => void }) {
   const { scrollY } = useScroll()
   const y = useTransform(scrollY, [0, 500], [0, 100])
   const opacity = useTransform(scrollY, [0, 300], [1, 0])
@@ -317,7 +363,9 @@ function HeroSection({ theme }: { theme: string }) {
 
           <div style={{ marginTop: 'clamp(1.5rem, 3vw, 2.5rem)' }}>
             <TextReveal delay={0.4}>
-              <MagneticButton>View Work</MagneticButton>
+              <MagneticButton onClick={toggleTheme}>
+                {theme === 'dark' ? 'Switch to Light' : 'Switch to Dark'}
+              </MagneticButton>
             </TextReveal>
           </div>
         </div>
@@ -403,11 +451,12 @@ function ProjectShowcaseBox({ project, index, theme }: { project: typeof project
   return (
     <motion.div
       key={project.title}
+      data-project-card="true"
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94], delay: index * 0.1 }}
       viewport={{ once: true, margin: '-50px' }}
-      onMouseEnter={() => showcaseImages.length > 0 && setIsHovered(true)}
+      onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       onClick={() => project.link && window.open(project.link, '_blank')}
       style={{
@@ -684,9 +733,21 @@ function ContactSection() {
             </p>
             <div style={{ display: 'flex', gap: '2rem' }}>
               {[
-                { name: 'Facebook', url: 'https://www.facebook.com/SinhaRoro' },
-                { name: 'Instagram', url: 'https://www.instagram.com/sinharoro/' },
-                { name: 'Gmail', url: 'mailto:kirigayaroro@gmail.com' },
+                { 
+                  name: 'Facebook', 
+                  url: 'https://www.facebook.com/SinhaRoro',
+                  icon: <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+                },
+                { 
+                  name: 'Instagram', 
+                  url: 'https://www.instagram.com/sinharoro/',
+                  icon: <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+                },
+                { 
+                  name: 'Gmail', 
+                  url: 'mailto:kirigayaroro@gmail.com',
+                  icon: <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M24 5.457v13.909c0 .904-.732 1.636-1.636 1.636h-3.819V11.73L12 16.64l-6.545-4.91v9.273H1.636A1.636 1.636 0 0 1 0 19.366V5.457c0-2.023 2.309-3.178 3.927-1.964L5.455 4.64 12 9.548l6.545-4.91 1.528-1.145C21.69 2.28 24 3.434 24 5.457z"/></svg>
+                },
               ].map((social) => (
                 <a
                   key={social.name}
@@ -700,6 +761,10 @@ function ContactSection() {
                     borderBottom: '1px solid var(--color-border)',
                     paddingBottom: '2px',
                     transition: 'border-color 0.3s, color 0.3s',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '0.5rem',
+                    color: 'var(--color-text-muted)',
                   }}
                   onMouseEnter={(e) => {
                     e.currentTarget.style.borderColor = 'var(--color-accent)'
@@ -707,10 +772,11 @@ function ContactSection() {
                   }}
                   onMouseLeave={(e) => {
                     e.currentTarget.style.borderColor = 'var(--color-border)'
-                    e.currentTarget.style.color = 'inherit'
+                    e.currentTarget.style.color = 'var(--color-text-muted)'
                   }}
                 >
-                  {social.name}
+                  {social.icon}
+                  <span>{social.name}</span>
                 </a>
               ))}
             </div>
@@ -1004,21 +1070,6 @@ function ThemeToggle({ theme, toggleTheme }: { theme: string; toggleTheme: () =>
           }}
         />
       )}
-      <button 
-        className="theme-toggle" 
-        onClick={toggleTheme}
-        aria-label="Toggle theme"
-      >
-        {theme === 'dark' ? (
-          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <path d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round"/>
-          </svg>
-        ) : (
-          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round"/>
-          </svg>
-        )}
-      </button>
     </>
   )
 }
@@ -1078,7 +1129,7 @@ export default function Home() {
         <FloatingNav />
         <ThemeToggle theme={theme} toggleTheme={toggleTheme} />
         <CustomCursor />
-        <HeroSection theme={theme} />
+        <HeroSection theme={theme} toggleTheme={toggleTheme} />
         <ProjectsSection />
         <SkillsSection />
         <ExperienceSection />

@@ -234,7 +234,12 @@ input, textarea {
   border-radius: 50%;
   pointer-events: none;
   z-index: 9999;
-  transition: width 0.3s, height 0.3s, background 0.3s;
+  transition: width 0.3s, height 0.3s, background 0.3s, border-radius 0.3s;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
 @media (max-width: 768px) {
