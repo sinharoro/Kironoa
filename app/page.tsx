@@ -397,14 +397,7 @@ function ProjectShowcaseBox({ project, index, theme }: { project: typeof project
   const [isHovered, setIsHovered] = useState(false)
 
   const showcaseImages = project.title === 'The Den' 
-    ? [
-        '/the den showcase/items/Screenshot 2026-05-08 140545.png',
-        '/the den showcase/items/Screenshot 2026-05-08 140533.png',
-        '/the den showcase/items/Screenshot 2026-05-08 140524.png',
-        '/the den showcase/items/Screenshot 2026-05-08 140514.png',
-        '/the den showcase/items/Screenshot 2026-05-08 140500.png',
-        '/the den showcase/items/Screenshot 2026-05-08 140410.png',
-      ]
+    ? ['/the den showcase/items/showcase card.png']
     : []
 
   return (
@@ -414,19 +407,48 @@ function ProjectShowcaseBox({ project, index, theme }: { project: typeof project
       whileInView={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94], delay: index * 0.1 }}
       viewport={{ once: true, margin: '-50px' }}
-      onMouseEnter={() => setIsHovered(true)}
+      onMouseEnter={() => showcaseImages.length > 0 && setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       onClick={() => project.link && window.open(project.link, '_blank')}
       style={{
         position: 'relative',
         border: '1px solid var(--color-border)',
         borderRadius: '12px',
-        overflow: 'hidden',
+        overflow: 'visible',
         background: 'var(--color-bg-alt)',
         cursor: project.link ? 'pointer' : 'default',
         aspectRatio: '4/3',
       }}
     >
+      {isHovered && showcaseImages.length > 0 && (
+        <div
+          style={{
+            position: 'fixed',
+            left: '50%',
+            top: '20%',
+            transform: 'translateX(-50%)',
+            zIndex: 1000,
+          }}
+        >
+          <motion.img
+            initial={{ opacity: 0, scale: 0.8, y: 20 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.8, y: 20 }}
+            transition={{ duration: 0.2 }}
+            src={showcaseImages[0]}
+            alt="Showcase"
+            style={{
+              width: 'auto',
+              height: 'auto',
+              maxWidth: '70vw',
+              maxHeight: '60vh',
+              objectFit: 'contain',
+              borderRadius: '16px',
+              boxShadow: '0 30px 100px rgba(0, 0, 0, 0.7), 0 0 0 2px rgba(255,255,255,0.1)',
+            }}
+          />
+        </div>
+      )}
       <AnimatePresence mode="wait">
         {!isHovered ? (
           <motion.div
@@ -496,80 +518,43 @@ function ProjectShowcaseBox({ project, index, theme }: { project: typeof project
           </motion.div>
         ) : (
           <motion.div
-            key="showcase"
+            key="hover"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             style={{
               position: 'absolute',
               inset: 0,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
               background: theme === 'dark' ? '#0d0c09' : '#f5f7f6',
               padding: '1rem',
             }}
           >
             <div style={{
-              position: 'absolute',
-              inset: 0,
-              display: 'grid',
-              gridTemplateColumns: 'repeat(2, 1fr)',
-              gridTemplateRows: 'repeat(3, 1fr)',
-              gap: '0.5rem',
-              padding: '0.5rem',
-            }}>
-              {showcaseImages.slice(0, 6).map((img, i) => (
-                <motion.div
-                  key={i}
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ delay: i * 0.05 }}
-                  style={{
-                    borderRadius: '8px',
-                    overflow: 'hidden',
-                    boxShadow: '0 4px 20px rgba(0,0,0,0.3)',
-                  }}
-                >
-                  <img 
-                    src={img} 
-                    alt={`Showcase ${i + 1}`}
-                    style={{
-                      width: '100%',
-                      height: '100%',
-                      objectFit: 'cover',
-                    }}
-                  />
-                </motion.div>
-              ))}
-            </div>
-            <div style={{
-              position: 'absolute',
-              bottom: '1rem',
-              left: '1rem',
-              right: '1rem',
               display: 'flex',
-              justifyContent: 'space-between',
+              flexDirection: 'column',
               alignItems: 'center',
-              padding: '0.75rem 1rem',
-              background: theme === 'dark' ? 'rgba(13, 12, 9, 0.9)' : 'rgba(255, 255, 255, 0.9)',
-              borderRadius: '8px',
-              backdropFilter: 'blur(10px)',
+              gap: '1rem',
             }}>
               <span style={{ 
-                fontSize: 'clamp(0.875rem, 2vw, 1rem)', 
-                fontWeight: 600,
-                color: theme === 'dark' ? '#fff' : '#080c0b',
+                fontSize: 'clamp(1.5rem, 4vw, 2rem)', 
+                fontWeight: 700,
+                color: 'var(--color-text)',
               }}>
                 {project.title}
               </span>
               <span style={{
-                fontSize: '0.65rem',
+                fontSize: '0.75rem',
                 letterSpacing: '0.1em',
                 textTransform: 'uppercase',
                 color: 'var(--color-accent)',
-                padding: '0.25rem 0.5rem',
+                padding: '0.5rem 1rem',
                 border: '1px solid var(--color-accent)',
                 borderRadius: '4px',
               }}>
-                View Project
+                Click to View
               </span>
             </div>
           </motion.div>
@@ -598,6 +583,7 @@ function ProjectsSection() {
           display: 'grid', 
           gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', 
           gap: '1.5rem',
+          overflow: 'visible',
         }}>
           {projects.map((project, index) => (
             <ProjectShowcaseBox 
