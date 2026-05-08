@@ -14,6 +14,12 @@ const projects = [
     link: '/games/SI.html',
   },
   {
+    title: 'The Den',
+    category: 'Development',
+    year: '2026',
+    link: 'https://thedenpagadiancity.vercel.app/',
+  },
+  {
     title: 'Brand Identity',
     category: 'Design',
     year: '2026',
@@ -387,7 +393,200 @@ function AboutSection() {
   )
 }
 
+function ProjectShowcaseBox({ project, index, theme }: { project: typeof projects[0]; index: number; theme: string }) {
+  const [isHovered, setIsHovered] = useState(false)
+
+  const showcaseImages = project.title === 'The Den' 
+    ? [
+        '/the den showcase/items/Screenshot 2026-05-08 140545.png',
+        '/the den showcase/items/Screenshot 2026-05-08 140533.png',
+        '/the den showcase/items/Screenshot 2026-05-08 140524.png',
+        '/the den showcase/items/Screenshot 2026-05-08 140514.png',
+        '/the den showcase/items/Screenshot 2026-05-08 140500.png',
+        '/the den showcase/items/Screenshot 2026-05-08 140410.png',
+      ]
+    : []
+
+  return (
+    <motion.div
+      key={project.title}
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94], delay: index * 0.1 }}
+      viewport={{ once: true, margin: '-50px' }}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+      onClick={() => project.link && window.open(project.link, '_blank')}
+      style={{
+        position: 'relative',
+        border: '1px solid var(--color-border)',
+        borderRadius: '12px',
+        overflow: 'hidden',
+        background: 'var(--color-bg-alt)',
+        cursor: project.link ? 'pointer' : 'default',
+        aspectRatio: '4/3',
+      }}
+    >
+      <AnimatePresence mode="wait">
+        {!isHovered ? (
+          <motion.div
+            key="initial"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            style={{
+              position: 'absolute',
+              inset: 0,
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '1rem',
+              padding: '2rem',
+            }}
+          >
+            {project.title === 'The Den' && (
+              <img 
+                src="/the den showcase/items/The Den logo.jpg" 
+                alt={project.title}
+                style={{
+                  width: '120px',
+                  height: '120px',
+                  objectFit: 'contain',
+                  borderRadius: '12px',
+                }}
+              />
+            )}
+            <div style={{ textAlign: 'center' }}>
+              <span style={{ 
+                fontSize: '0.7rem', 
+                letterSpacing: '0.15em', 
+                textTransform: 'uppercase',
+                color: 'var(--color-accent)',
+              }}>
+                {project.category}
+              </span>
+              <h3 style={{ 
+                fontSize: 'clamp(1.25rem, 3vw, 1.75rem)', 
+                fontWeight: 700, 
+                color: 'var(--color-text)',
+                marginTop: '0.5rem',
+              }}>
+                {project.title}
+              </h3>
+              <span style={{ 
+                fontSize: '0.75rem', 
+                color: 'var(--color-text-muted)',
+                display: 'block',
+                marginTop: '0.5rem',
+              }}>
+                {project.year}
+              </span>
+            </div>
+            <span style={{
+              position: 'absolute',
+              bottom: '1rem',
+              fontSize: '0.65rem',
+              color: 'var(--color-text-muted)',
+              letterSpacing: '0.1em',
+              opacity: 0.6,
+            }}>
+              Hover to explore
+            </span>
+          </motion.div>
+        ) : (
+          <motion.div
+            key="showcase"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            style={{
+              position: 'absolute',
+              inset: 0,
+              background: theme === 'dark' ? '#0d0c09' : '#f5f7f6',
+              padding: '1rem',
+            }}
+          >
+            <div style={{
+              position: 'absolute',
+              inset: 0,
+              display: 'grid',
+              gridTemplateColumns: 'repeat(2, 1fr)',
+              gridTemplateRows: 'repeat(3, 1fr)',
+              gap: '0.5rem',
+              padding: '0.5rem',
+            }}>
+              {showcaseImages.slice(0, 6).map((img, i) => (
+                <motion.div
+                  key={i}
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ delay: i * 0.05 }}
+                  style={{
+                    borderRadius: '8px',
+                    overflow: 'hidden',
+                    boxShadow: '0 4px 20px rgba(0,0,0,0.3)',
+                  }}
+                >
+                  <img 
+                    src={img} 
+                    alt={`Showcase ${i + 1}`}
+                    style={{
+                      width: '100%',
+                      height: '100%',
+                      objectFit: 'cover',
+                    }}
+                  />
+                </motion.div>
+              ))}
+            </div>
+            <div style={{
+              position: 'absolute',
+              bottom: '1rem',
+              left: '1rem',
+              right: '1rem',
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              padding: '0.75rem 1rem',
+              background: theme === 'dark' ? 'rgba(13, 12, 9, 0.9)' : 'rgba(255, 255, 255, 0.9)',
+              borderRadius: '8px',
+              backdropFilter: 'blur(10px)',
+            }}>
+              <span style={{ 
+                fontSize: 'clamp(0.875rem, 2vw, 1rem)', 
+                fontWeight: 600,
+                color: theme === 'dark' ? '#fff' : '#080c0b',
+              }}>
+                {project.title}
+              </span>
+              <span style={{
+                fontSize: '0.65rem',
+                letterSpacing: '0.1em',
+                textTransform: 'uppercase',
+                color: 'var(--color-accent)',
+                padding: '0.25rem 0.5rem',
+                border: '1px solid var(--color-accent)',
+                borderRadius: '4px',
+              }}>
+                View Project
+              </span>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </motion.div>
+  )
+}
+
 function ProjectsSection() {
+  const [theme, setTheme] = useState('dark')
+  
+  useEffect(() => {
+    const savedTheme = localStorage.getItem('theme') || 'dark'
+    setTheme(savedTheme)
+  }, [])
+
   return (
     <section id="projects" style={{ padding: 'clamp(3rem, 8vh, 8rem) clamp(1.5rem, 5vw, 6em)', background: 'var(--color-bg-alt)' }}>
       <div className="container">
@@ -397,44 +596,16 @@ function ProjectsSection() {
 
         <div style={{ 
           display: 'grid', 
-          gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', 
+          gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', 
           gap: '1.5rem',
         }}>
           {projects.map((project, index) => (
-            <motion.div
-              key={project.title}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }}
-              viewport={{ once: true, margin: '-50px' }}
-              whileHover={{ boxShadow: '0 0 20px rgba(0, 245, 160, 0.05)' }}
-              onClick={() => project.link && window.open(project.link, '_blank')}
-              style={{
-                border: '1px solid var(--color-border)',
-                borderRadius: '8px',
-                padding: '2rem',
-                background: 'var(--color-bg-alt)',
-                transition: 'border-color 0.3s, box-shadow 0.3s',
-                cursor: project.link ? 'pointer' : 'default',
-              }}
-            >
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
-                <span style={{ 
-                  fontSize: '0.75rem', 
-                  letterSpacing: '0.1em', 
-                  textTransform: 'uppercase',
-                  color: 'var(--color-accent)',
-                }}>
-                  {project.category}
-                </span>
-                <span style={{ fontSize: '0.875rem', color: 'var(--color-text-muted)' }}>
-                  {project.year}
-                </span>
-              </div>
-              <h3 style={{ fontSize: '2rem', fontWeight: 700, marginBottom: '0.5rem' }}>
-                {project.title}
-              </h3>
-            </motion.div>
+            <ProjectShowcaseBox 
+              key={project.title} 
+              project={project} 
+              index={index}
+              theme={theme}
+            />
           ))}
         </div>
       </div>
@@ -640,6 +811,110 @@ const navItems = [
   { label: 'Contact', id: 'contact' },
 ]
 
+function FloatingClock({ theme }: { theme: string }) {
+  const [time, setTime] = useState({ time: '', date: '' })
+
+  useEffect(() => {
+    const updateTime = () => {
+      const now = new Date()
+      const options: Intl.DateTimeFormatOptions = {
+        timeZone: 'Asia/Manila',
+        hour: '2-digit',
+        minute: '2-digit',
+        hour12: true,
+      }
+      const dateOptions: Intl.DateTimeFormatOptions = {
+        timeZone: 'Asia/Manila',
+        weekday: 'short',
+        month: 'short',
+        day: 'numeric',
+      }
+      setTime({
+        time: now.toLocaleTimeString('en-US', options),
+        date: now.toLocaleDateString('en-US', dateOptions),
+      })
+    }
+    updateTime()
+    const interval = setInterval(updateTime, 1000)
+    return () => clearInterval(interval)
+  }, [])
+
+  const [isHovered, setIsHovered] = useState(false)
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: -20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.8, delay: 0.5 }}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+      style={{
+        position: 'fixed',
+        top: 'clamp(0.75rem, 2vw, 1.5rem)',
+        left: 'clamp(0.75rem, 2vw, 1.5rem)',
+        padding: 'clamp(0.5rem, 1.5vw, 0.75rem) clamp(1rem, 2.5vw, 1.5rem)',
+        background: theme === 'dark' ? 'rgba(8, 12, 11, 0.6)' : 'rgba(255, 255, 255, 0.7)',
+        border: '1px solid var(--color-border)',
+        borderRadius: '12px',
+        backdropFilter: 'blur(10px)',
+        zIndex: 100,
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'flex-start',
+        gap: '0.15rem',
+        cursor: 'pointer',
+      }}
+    >
+      {isHovered && (
+        <motion.span
+          initial={{ opacity: 0, y: 5 }}
+          animate={{ opacity: 1, y: 0 }}
+          style={{
+            position: 'absolute',
+            bottom: '-28px',
+            left: '50%',
+            transform: 'translateX(-50%)',
+            fontSize: 'clamp(0.5rem, 1vw, 0.625rem)',
+            color: 'var(--color-accent)',
+            whiteSpace: 'nowrap',
+            padding: '0.25rem 0.5rem',
+            background: theme === 'dark' ? 'rgba(8, 12, 11, 0.9)' : 'rgba(255, 255, 255, 0.95)',
+            borderRadius: '4px',
+            border: '1px solid var(--color-border)',
+          }}
+        >
+          This is my timezone
+        </motion.span>
+      )}
+      <span style={{
+        fontSize: 'clamp(0.875rem, 2.5vw, 1.125rem)',
+        fontWeight: 600,
+        color: 'var(--color-accent)',
+        letterSpacing: '0.1em',
+        fontFamily: "'SF Mono', 'Fira Code', monospace",
+      }}>
+        {time.time}
+      </span>
+      <span style={{
+        fontSize: 'clamp(0.625rem, 1.25vw, 0.75rem)',
+        color: 'var(--color-text-muted)',
+        textTransform: 'uppercase',
+        letterSpacing: '0.15em',
+      }}>
+        {time.date}
+      </span>
+      <span style={{
+        fontSize: 'clamp(0.5rem, 1vw, 0.625rem)',
+        color: 'var(--color-accent)',
+        opacity: 0.6,
+        letterSpacing: '0.1em',
+      }}>
+        PHT
+      </span>
+    </motion.div>
+  )
+}
+
 function FloatingNav() {
   const scrollToSection = (id: string) => {
     const element = document.getElementById(id)
@@ -811,6 +1086,7 @@ export default function Home() {
   return (
     <SmoothScroll>
       <PageTransition>
+        <FloatingClock theme={theme} />
         <FloatingNav />
         <ThemeToggle theme={theme} toggleTheme={toggleTheme} />
         <CustomCursor />
