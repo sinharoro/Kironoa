@@ -10,28 +10,28 @@ const projects = [
   {
     title: 'Space Impact: Ultra Edition',
     category: 'Game',
-    year: '2024',
+    year: '2026',
     link: '/games/SI.html',
   },
   {
     title: 'Brand Identity',
     category: 'Design',
-    year: '2024',
+    year: '2026',
   },
   {
     title: 'E-Commerce Platform',
     category: 'Development',
-    year: '2024',
+    year: '2026',
   },
   {
     title: 'Editorial Design',
     category: 'Design',
-    year: '2023',
+    year: '2026',
   },
   {
     title: 'Mobile Application',
     category: 'Development',
-    year: '2023',
+    year: '2026',
   },
 ]
 
@@ -43,9 +43,8 @@ const skills = [
 ]
 
 const experiences = [
-  { role: 'Senior Developer', company: 'Studio Nexus', period: '2022 — Present' },
-  { role: 'Creative Technologist', company: 'Digital Craft', period: '2020 — 2022' },
-  { role: 'Designer', company: 'Minimalist Labs', period: '2018 — 2020' },
+  { role: 'Vibe Coder', company: 'Self-taught', period: 'January 2026 — Present' },
+  { role: 'School Projects', company: 'BS Computer Science 2nd Year', period: 'January 2026 — Present' },
 ]
 
 function NoiseOverlay() {
@@ -525,10 +524,16 @@ function ContactSection() {
               Available for freelance projects and collaborations. Let's create something remarkable together.
             </p>
             <div style={{ display: 'flex', gap: '2rem' }}>
-              {['Twitter', 'LinkedIn', 'GitHub'].map((social) => (
+              {[
+                { name: 'Facebook', url: 'https://www.facebook.com/SinhaRoro' },
+                { name: 'Instagram', url: 'https://www.instagram.com/sinharoro/' },
+                { name: 'Gmail', url: 'mailto:kirigayaroro@gmail.com' },
+              ].map((social) => (
                 <a
-                  key={social}
-                  href="#"
+                  key={social.name}
+                  href={social.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   style={{
                     fontSize: '0.875rem',
                     letterSpacing: '0.05em',
@@ -546,7 +551,7 @@ function ContactSection() {
                     e.currentTarget.style.color = 'inherit'
                   }}
                 >
-                  {social}
+                  {social.name}
                 </a>
               ))}
             </div>
