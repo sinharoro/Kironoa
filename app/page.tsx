@@ -428,6 +428,7 @@ function ProjectShowcaseBox({ project, index, theme }: { project: typeof project
             top: '20%',
             transform: 'translateX(-50%)',
             zIndex: 1000,
+            pointerEvents: 'none',
           }}
         >
           <motion.img
@@ -445,6 +446,7 @@ function ProjectShowcaseBox({ project, index, theme }: { project: typeof project
               objectFit: 'contain',
               borderRadius: '16px',
               boxShadow: '0 30px 100px rgba(0, 0, 0, 0.7), 0 0 0 2px rgba(255,255,255,0.1)',
+              pointerEvents: 'none',
             }}
           />
         </div>
