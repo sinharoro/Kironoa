@@ -405,9 +405,14 @@ function AboutSection() {
   return (
     <section id="about" style={{ padding: 'clamp(3rem, 8vh, 8rem) clamp(1.5rem, 5vw, 6em)' }}>
       <div className="container">
-        <TextReveal>
-          <h2 className="section-title">About</h2>
-        </TextReveal>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
+          <TextReveal>
+            <h2 className="section-title">About</h2>
+          </TextReveal>
+          <MagneticButton onClick={() => window.open('https://aboutroro.vercel.app/', '_blank')}>
+            Access Profile
+          </MagneticButton>
+        </div>
 
         <div style={{ 
           display: 'grid', 
