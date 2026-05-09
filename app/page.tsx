@@ -8,36 +8,20 @@ const aboutBio = `Crafting digital experiences with precision and intention. Bas
 
 const projects = [
   {
-    title: 'Space Impact: Ultra Edition',
+    title: 'Meteor Blast',
     category: 'Game',
     year: '2026',
-    link: '/games/SI.html',
+    link: 'https://meteor-blast.vercel.app/',
+    logo: '/images/MBlast logo.png',
+    showcase: '/images/Mblast showcase card.png',
   },
   {
     title: 'The Den',
-    category: 'Development',
+    category: 'E-Commerce Platform',
     year: '2026',
     link: 'https://thedenpagadiancity.vercel.app/',
-  },
-  {
-    title: 'Brand Identity',
-    category: 'Design',
-    year: '2026',
-  },
-  {
-    title: 'E-Commerce Platform',
-    category: 'Development',
-    year: '2026',
-  },
-  {
-    title: 'Editorial Design',
-    category: 'Design',
-    year: '2026',
-  },
-  {
-    title: 'Mobile Application',
-    category: 'Development',
-    year: '2026',
+    logo: '/images/The Den logo.jpg',
+    showcase: '/images/The Den showcase card.png',
   },
 ]
 
@@ -458,10 +442,6 @@ function AboutSection() {
 function ProjectShowcaseBox({ project, index, theme }: { project: typeof projects[0]; index: number; theme: string }) {
   const [isHovered, setIsHovered] = useState(false)
 
-  const showcaseImages = project.title === 'The Den' 
-    ? ['/the den showcase/items/showcase card.png']
-    : []
-
   return (
     <motion.div
       key={project.title}
@@ -477,158 +457,89 @@ function ProjectShowcaseBox({ project, index, theme }: { project: typeof project
         position: 'relative',
         border: '1px solid var(--color-border)',
         borderRadius: '12px',
-        overflow: 'visible',
+        overflow: 'hidden',
         background: 'var(--color-bg-alt)',
         cursor: project.link ? 'pointer' : 'default',
         aspectRatio: '4/3',
       }}
     >
-      {isHovered && showcaseImages.length > 0 && (
-        <div
+      {isHovered && project.showcase ? (
+        <img
+          src={project.showcase}
+          alt="Showcase"
+          loading="lazy"
           style={{
-            position: 'fixed',
-            left: '50%',
-            top: '20%',
-            transform: 'translateX(-50%)',
-            zIndex: 1000,
-            pointerEvents: 'none',
+            position: 'absolute',
+            inset: 0,
+            width: '100%',
+            height: '100%',
+            objectFit: 'cover',
           }}
-        >
-<motion.img
-            initial={{ opacity: 0, scale: 0.8, y: 20 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.8, y: 20 }}
-            transition={{ duration: 0.2 }}
-            src={showcaseImages[0]}
-            alt="Showcase"
-            loading="lazy"
-            style={{
-              width: 'auto',
-              height: 'auto',
-              maxWidth: '70vw',
-              maxHeight: '60vh',
-              objectFit: 'contain',
-              borderRadius: '16px',
-              boxShadow: '0 30px 100px rgba(0, 0, 0, 0.7), 0 0 0 2px rgba(255,255,255,0.1)',
-              pointerEvents: 'none',
-            }}
-          />
+        />
+      ) : (
+        <div style={{
+          position: 'absolute',
+          inset: 0,
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center',
+          gap: '1rem',
+          padding: '2rem',
+        }}>
+          {project.logo && (
+            <img 
+              src={project.logo}
+              alt={project.title}
+              width={120}
+              height={120}
+              loading="lazy"
+              style={{
+                width: '120px',
+                height: '120px',
+                objectFit: 'contain',
+                borderRadius: '12px',
+              }}
+            />
+          )}
+          <div style={{ textAlign: 'center' }}>
+            <span style={{ 
+              fontSize: '0.7rem', 
+              letterSpacing: '0.15em', 
+              textTransform: 'uppercase',
+              color: 'var(--color-accent)',
+            }}>
+              {project.category}
+            </span>
+            <h3 style={{ 
+              fontSize: 'clamp(1.25rem, 3vw, 1.75rem)', 
+              fontWeight: 700, 
+              color: 'var(--color-text)',
+              marginTop: '0.5rem',
+            }}>
+              {project.title}
+            </h3>
+            <span style={{ 
+              fontSize: '0.75rem', 
+              color: 'var(--color-text-muted)',
+              display: 'block',
+              marginTop: '0.5rem',
+            }}>
+              {project.year}
+            </span>
+          </div>
+          <span style={{
+            position: 'absolute',
+            bottom: '1rem',
+            fontSize: '0.65rem',
+            color: 'var(--color-text-muted)',
+            letterSpacing: '0.1em',
+            opacity: 0.6,
+          }}>
+            Hover to explore
+          </span>
         </div>
       )}
-      <AnimatePresence mode="wait">
-        {!isHovered ? (
-          <motion.div
-            key="initial"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            style={{
-              position: 'absolute',
-              inset: 0,
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              justifyContent: 'center',
-              gap: '1rem',
-              padding: '2rem',
-            }}
-          >
-            {project.title === 'The Den' && (
-              <img 
-                src="/the den showcase/items/The Den logo.jpg" 
-                alt={project.title}
-                width={120}
-                height={120}
-                loading="lazy"
-                style={{
-                  width: '120px',
-                  height: '120px',
-                  objectFit: 'contain',
-                  borderRadius: '12px',
-                }}
-              />
-            )}
-            <div style={{ textAlign: 'center' }}>
-              <span style={{ 
-                fontSize: '0.7rem', 
-                letterSpacing: '0.15em', 
-                textTransform: 'uppercase',
-                color: 'var(--color-accent)',
-              }}>
-                {project.category}
-              </span>
-              <h3 style={{ 
-                fontSize: 'clamp(1.25rem, 3vw, 1.75rem)', 
-                fontWeight: 700, 
-                color: 'var(--color-text)',
-                marginTop: '0.5rem',
-              }}>
-                {project.title}
-              </h3>
-              <span style={{ 
-                fontSize: '0.75rem', 
-                color: 'var(--color-text-muted)',
-                display: 'block',
-                marginTop: '0.5rem',
-              }}>
-                {project.year}
-              </span>
-            </div>
-            <span style={{
-              position: 'absolute',
-              bottom: '1rem',
-              fontSize: '0.65rem',
-              color: 'var(--color-text-muted)',
-              letterSpacing: '0.1em',
-              opacity: 0.6,
-            }}>
-              Hover to explore
-            </span>
-          </motion.div>
-        ) : (
-          <motion.div
-            key="hover"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            style={{
-              position: 'absolute',
-              inset: 0,
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              background: theme === 'dark' ? '#0d0c09' : '#f5f7f6',
-              padding: '1rem',
-            }}
-          >
-            <div style={{
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              gap: '1rem',
-            }}>
-              <span style={{ 
-                fontSize: 'clamp(1.5rem, 4vw, 2rem)', 
-                fontWeight: 700,
-                color: 'var(--color-text)',
-              }}>
-                {project.title}
-              </span>
-              <span style={{
-                fontSize: '0.75rem',
-                letterSpacing: '0.1em',
-                textTransform: 'uppercase',
-                color: 'var(--color-accent)',
-                padding: '0.5rem 1rem',
-                border: '1px solid var(--color-accent)',
-                borderRadius: '4px',
-              }}>
-                Click to View
-              </span>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
     </motion.div>
   )
 }
@@ -652,7 +563,6 @@ function ProjectsSection() {
           display: 'grid', 
           gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', 
           gap: '1.5rem',
-          overflow: 'visible',
         }}>
           {projects.map((project, index) => (
             <ProjectShowcaseBox 
