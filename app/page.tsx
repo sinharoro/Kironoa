@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useRef, useState, useCallback } from 'react'
+import { useEffect, useRef, useState, useCallback, memo } from 'react'
 import { motion, useScroll, useTransform, useSpring, useInView, AnimatePresence } from 'framer-motion'
 import Lenis from 'lenis'
 
@@ -128,9 +128,9 @@ function CustomCursor() {
     }
   }, [isProjectHover])
 
-  return (
+return (
     <>
-      <div ref={dotRef} className="cursor-dot" style={{ opacity: isProjectHover ? 0 : 1 }} />
+      <div ref={dotRef} className="cursor-dot" style={{ opacity: isProjectHover ? 0 : 1, willChange: 'left, top' }} />
       <div 
         ref={ringRef} 
         className="cursor-ring"
@@ -144,6 +144,7 @@ function CustomCursor() {
           alignItems: 'center',
           justifyContent: 'center',
           border: isProjectHover ? '1.5px solid var(--color-accent)' : '1px solid var(--color-accent)',
+          willChange: 'left, top, transform, width, height',
         }}
       >
         {isProjectHover && (
@@ -173,12 +174,13 @@ function SmoothScroll({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     const lenis = new Lenis({
-      duration: 1.4,
+      duration: 1.2,
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
       orientation: 'vertical',
       gestureOrientation: 'vertical',
       smoothWheel: true,
       touchMultiplier: 2,
+      wheelMultiplier: 1,
     })
 
     lenisRef.current = lenis
@@ -272,7 +274,7 @@ function TextReveal({ children, delay = 0 }: { children: React.ReactNode; delay?
   )
 }
 
-function BentoBox({ children, className = '', style }: { children: React.ReactNode; className?: string; style?: React.CSSProperties }) {
+const BentoBox = memo(function BentoBox({ children, className = '', style }: { children: React.ReactNode; className?: string; style?: React.CSSProperties }) {
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -287,13 +289,14 @@ function BentoBox({ children, className = '', style }: { children: React.ReactNo
         padding: '2rem',
         background: 'var(--color-bg-alt)',
         transition: 'border-color 0.3s, box-shadow 0.3s',
+        willChange: 'transform, opacity',
       }}
       className={className}
     >
       {children}
     </motion.div>
   )
-}
+})
 
 function HeroSection({ theme, toggleTheme }: { theme: string; toggleTheme: () => void }) {
   const { scrollY } = useScroll()
@@ -318,6 +321,9 @@ function HeroSection({ theme, toggleTheme }: { theme: string; toggleTheme: () =>
             <img 
               src="/images/minilogoKR.png" 
               alt="Kironoa Logo" 
+              width={70}
+              height={70}
+              loading="eager"
               style={{ width: 'clamp(40px, 8vw, 70px)', height: 'clamp(40px, 8vw, 70px)', objectFit: 'contain' }}
             />
             <TextReveal>
@@ -386,6 +392,9 @@ function HeroSection({ theme, toggleTheme }: { theme: string; toggleTheme: () =>
             <img 
               src={theme === 'dark' ? '/images/Kironoa.png' : '/images/KironoaL.png'} 
               alt="Kironoa Roro" 
+              width={320}
+              height={320}
+              loading="eager"
               style={{
                 width: '100%',
                 height: '100%',
@@ -485,13 +494,14 @@ function ProjectShowcaseBox({ project, index, theme }: { project: typeof project
             pointerEvents: 'none',
           }}
         >
-          <motion.img
+<motion.img
             initial={{ opacity: 0, scale: 0.8, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.8, y: 20 }}
             transition={{ duration: 0.2 }}
             src={showcaseImages[0]}
             alt="Showcase"
+            loading="lazy"
             style={{
               width: 'auto',
               height: 'auto',
@@ -527,6 +537,9 @@ function ProjectShowcaseBox({ project, index, theme }: { project: typeof project
               <img 
                 src="/the den showcase/items/The Den logo.jpg" 
                 alt={project.title}
+                width={120}
+                height={120}
+                loading="lazy"
                 style={{
                   width: '120px',
                   height: '120px',
@@ -870,7 +883,7 @@ const navItems = [
   { label: 'Contact', id: 'contact' },
 ]
 
-function FloatingClock({ theme }: { theme: string }) {
+const FloatingClock = memo(function FloatingClock({ theme }: { theme: string }) {
   const [time, setTime] = useState({ time: '', date: '' })
 
   useEffect(() => {
@@ -972,7 +985,7 @@ function FloatingClock({ theme }: { theme: string }) {
       </span>
     </motion.div>
   )
-}
+})
 
 function FloatingNav() {
   const scrollToSection = (id: string) => {
@@ -1044,7 +1057,7 @@ function FloatingNav() {
   )
 }
 
-function ThemeToggle({ theme, toggleTheme }: { theme: string; toggleTheme: () => void }) {
+const ThemeToggle = memo(function ThemeToggle({ theme }: { theme: string }) {
   const [bgIndex, setBgIndex] = useState(0)
   const backgrounds = ['/images/saogreen.png', '/images/saopurple.png', '/images/saored.png']
 
@@ -1072,24 +1085,31 @@ function ThemeToggle({ theme, toggleTheme }: { theme: string; toggleTheme: () =>
             backgroundSize: 'cover',
             backgroundPosition: 'center',
             transition: 'background-image 1s ease-in-out',
+            willChange: 'background-image',
           }}
         />
       )}
     </>
   )
-}
+})
 
-function LoadingScreen() {
+const LoadingScreen = memo(function LoadingScreen() {
   return (
-    <div style={{
-      position: 'fixed',
-      inset: 0,
-      background: '#050505',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      zIndex: 9999,
-    }}>
+    <motion.div
+      initial={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.3 }}
+      style={{
+        position: 'fixed',
+        inset: 0,
+        background: '#050505',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        zIndex: 9999,
+        willChange: 'opacity',
+      }}
+    >
       <img 
         src="/images/one-piece-luffy.gif" 
         alt="Loading" 
@@ -1098,9 +1118,9 @@ function LoadingScreen() {
           height: 'auto',
         }}
       />
-    </div>
+    </motion.div>
   )
-}
+})
 
 export default function Home() {
   const [mounted, setMounted] = useState(false)
@@ -1108,7 +1128,7 @@ export default function Home() {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    const timer = setTimeout(() => setLoading(false), 2500)
+    const timer = setTimeout(() => setLoading(false), 1500)
     setMounted(true)
     const savedTheme = localStorage.getItem('theme') || 'dark'
     setTheme(savedTheme)
@@ -1132,7 +1152,7 @@ export default function Home() {
       <PageTransition>
         <FloatingClock theme={theme} />
         <FloatingNav />
-        <ThemeToggle theme={theme} toggleTheme={toggleTheme} />
+        <ThemeToggle theme={theme} />
         <CustomCursor />
         <HeroSection theme={theme} toggleTheme={toggleTheme} />
         <ProjectsSection />
