@@ -296,12 +296,12 @@ function HeroSection({ theme, toggleTheme }: { theme: string; toggleTheme: () =>
         minHeight: '100vh',
         display: 'flex',
         alignItems: 'center',
-        padding: '0 clamp(3rem, 6vw, 6rem)',
+        padding: 'var(--hero-section-padding)',
         position: 'relative',
         overflow: 'hidden',
       }}
     >
-      <motion.div style={{ y, opacity, display: 'flex', width: '100%', alignItems: 'center', gap: 'clamp(2rem, 5vw, 6rem)', position: 'relative', zIndex: 1 }}>
+      <motion.div style={{ y, opacity, display: 'flex', flexDirection: 'var(--hero-fd)', width: '100%', alignItems: 'center', gap: 'clamp(2rem, 5vw, 6rem)', position: 'relative', zIndex: 1 }}>
         <div style={{ flex: 1, minWidth: 0 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 'clamp(1rem, 2vw, 2rem)', marginBottom: '2rem' }}>
             <img 
@@ -368,6 +368,7 @@ function HeroSection({ theme, toggleTheme }: { theme: string; toggleTheme: () =>
           justifyContent: 'flex-end',
           alignItems: 'center',
           paddingRight: 'clamp(0.5rem, 2vw, 2rem)',
+          order: 'var(--hero-img-order)',
         }}>
           <div style={{
             position: 'relative',
@@ -411,7 +412,7 @@ function AboutSection() {
 
         <div style={{ 
           display: 'grid', 
-          gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', 
+          gridTemplateColumns: 'var(--about-bio-grid)', 
           gap: '1.5rem',
         }}>
           <BentoBox>
@@ -426,7 +427,7 @@ function AboutSection() {
           </BentoBox>
         </div>
 
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem', marginTop: '1.5rem' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'var(--about-stats-grid)', gap: '1.5rem', marginTop: '1.5rem' }}>
           <BentoBox>
             <p style={{ fontSize: '4rem', fontWeight: 800, color: 'var(--color-accent)', marginBottom: '0.5rem' }}>2+</p>
             <p style={{ fontSize: '0.875rem', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Months Experience</p>
@@ -563,7 +564,7 @@ function ProjectsSection() {
 
         <div style={{ 
           display: 'grid', 
-          gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', 
+          gridTemplateColumns: 'var(--projects-grid)', 
           gap: '1.5rem',
         }}>
           {projects.map((project, index) => (
@@ -590,7 +591,7 @@ function SkillsSection() {
 
         <div style={{ 
           display: 'grid', 
-          gridTemplateColumns: 'repeat(3, 1fr)', 
+          gridTemplateColumns: 'var(--skills-grid)', 
           gap: '1.5rem',
         }}>
           {skills.map((skill, index) => (
@@ -634,7 +635,7 @@ function ExperienceSection() {
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
           {experiences.map((exp, index) => (
-            <BentoBox key={exp.role} style={{ display: 'grid', gridTemplateColumns: '150px 1fr', gap: '2rem', alignItems: 'center' }}>
+            <BentoBox key={exp.role} style={{ display: 'grid', gridTemplateColumns: 'var(--experience-grid)', gap: '2rem', alignItems: 'center' }}>
               <span style={{ color: 'var(--color-text-muted)', fontSize: '0.875rem' }}>{exp.period}</span>
               <div>
                 <h3 style={{ fontSize: '1.5rem', fontWeight: 600, marginBottom: '0.25rem' }}>{exp.role}</h3>
@@ -731,7 +732,7 @@ function ContactSection() {
           <h2 className="section-title">Contact</h2>
         </TextReveal>
 
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '1.5rem' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'var(--contact-grid)', gap: '1.5rem' }}>
           <BentoBox>
             <p style={{ fontSize: '1.125rem', lineHeight: 1.7, color: 'var(--color-text-muted)', marginBottom: '2rem' }}>
               Available for freelance projects and collaborations. Let's create something remarkable together.
