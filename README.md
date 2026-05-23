@@ -100,6 +100,86 @@ lib/
   supabase.ts         ← Supabase client singleton
 ```
 
+---
+
+## PHP Backend + MySQL (Messaging & Visit Counter)
+
+This project includes a PHP REST API backend with MySQL for two features:
+- **Messaging System** — visitors can leave messages (nickname + message)
+- **Visit Counter** — tracks total homepage visits
+
+### Backend Structure
+
+```
+backend/
+  schema.sql              ← MySQL database schema
+  config/
+    database.php          ← PDO database connection + CORS headers
+  api/
+    messages.php          ← GET (fetch all), POST (add), DELETE (remove)
+    visits.php            ← GET (get count), POST (increment)
+```
+
+### Setup Instructions (XAMPP)
+
+#### 1. Start XAMPP
+- Open XAMPP Control Panel
+- Start **Apache** and **MySQL** services
+
+#### 2. Import the database
+- Open phpMyAdmin: [http://localhost/phpmyadmin](http://localhost/phpmyadmin)
+- Click **Import**, select `backend/schema.sql`, and run it
+- This creates the `kironoa` database with `messages` and `visits` tables
+
+#### 3. Deploy the PHP backend
+- Copy the entire `backend/` folder into `C:\xampp\htdocs\`
+- Rename it to `kironoa-api`
+- Your API will be available at: `http://localhost/kironoa-api/`
+
+#### 4. Configure environment
+- Open `.env.local` in the project root
+- Verify or update:
+  ```
+  NEXT_PUBLIC_API_URL=http://localhost/kironoa-api/api
+  ```
+
+#### 5. Run the Next.js dev server
+```bash
+npm run dev
+```
+
+### API Endpoints
+
+| Method   | Endpoint                          | Description              |
+|----------|-----------------------------------|--------------------------|
+| `GET`    | `/api/messages.php`               | Fetch all messages       |
+| `POST`   | `/api/messages.php`               | Add a new message        |
+| `DELETE` | `/api/messages.php`               | Delete a message by ID   |
+| `GET`    | `/api/visits.php`                 | Get total visit count    |
+| `POST`   | `/api/visits.php`                 | Increment visit count    |
+
+### Database Tables
+
+**messages**
+| Field      | Type         | Description              |
+|------------|--------------|--------------------------|
+| id         | INT (PK)     | Auto-increment ID        |
+| nickname   | VARCHAR(100) | Sender's nickname        |
+| message    | TEXT         | Message content          |
+| created_at | TIMESTAMP    | Auto-set on creation     |
+
+**visits**
+| Field | Type     | Description             |
+|-------|----------|-------------------------|
+| id    | INT (PK) | Always 1 (single row)   |
+| count | INT      | Total visit count       |
+
+### Troubleshooting
+
+- **CORS errors**: Ensure `database.php` has `Access-Control-Allow-Origin: http://localhost:3000`
+- **Database connection fails**: Check your MySQL credentials in `backend/config/database.php` (default: root / no password)
+- **404 on API calls**: Verify the backend folder is in XAMPP's `htdocs` and the URL in `.env.local` is correct
+
 ## Key improvements over original
 - Supabase credentials moved to `.env.local` (never hardcoded)
 - `body` always visible — no auth-blocking blank screen

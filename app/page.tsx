@@ -4,6 +4,8 @@ import { useEffect, useRef, useState, useCallback, memo } from 'react'
 import { motion, useScroll, useTransform, useSpring, useInView, AnimatePresence } from 'framer-motion'
 import Lenis from 'lenis'
 
+const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost/kironoa-api/api'
+
 const aboutBio = `Crafting digital experiences with precision and intention. Based in Misamis Occidental, Philippines.`
 
 const projects = [
@@ -646,7 +648,82 @@ function ExperienceSection() {
   )
 }
 
+function MessagesSection() {
+  const [messages, setMessages] = useState<{ id: number; nickname: string; message: string; created_at: string }[]>([])
+
+  useEffect(() => {
+    fetch(`${API_BASE}/messages.php`)
+      .then(res => res.json())
+      .then(data => setMessages(Array.isArray(data) ? data : []))
+      .catch(() => {})
+  }, [])
+
+  return (
+    <section id="messages" style={{ padding: 'clamp(3rem, 8vh, 8rem) clamp(1.5rem, 5vw, 6em)' }}>
+      <div className="container">
+        <TextReveal>
+          <h2 className="section-title">Messages</h2>
+        </TextReveal>
+
+        <BentoBox>
+          {messages.length > 0 ? (
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', maxHeight: '400px', overflowY: 'auto' }}>
+              {messages.map((msg) => (
+                <div key={msg.id} style={{ padding: '0.75rem', background: 'var(--color-bg)', border: '1px solid var(--color-border)', borderRadius: '4px' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.25rem' }}>
+                    <span style={{ fontWeight: 600, fontSize: '0.875rem', color: 'var(--color-accent)' }}>{msg.nickname}</span>
+                    <span style={{ fontSize: '0.7rem', color: 'var(--color-text-muted)' }}>
+                      {new Date(msg.created_at).toLocaleDateString()}
+                    </span>
+                  </div>
+                  <p style={{ fontSize: '0.875rem', color: 'var(--color-text-muted)', lineHeight: 1.5 }}>{msg.message}</p>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <p style={{ color: 'var(--color-text-muted)', textAlign: 'center', padding: '2rem' }}>
+              No messages yet. Be the first to send one!
+            </p>
+          )}
+        </BentoBox>
+      </div>
+    </section>
+  )
+}
+
 function ContactSection() {
+  const [nickname, setNickname] = useState('')
+  const [message, setMessage] = useState('')
+  const [submitting, setSubmitting] = useState(false)
+  const [success, setSuccess] = useState('')
+  const [error, setError] = useState('')
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setSubmitting(true)
+    setSuccess('')
+    setError('')
+
+    try {
+      const res = await fetch(`http://localhost/final-exam/save_message.php`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ nickname, message }),
+      })
+      const data = await res.json()
+      if (res.ok) {
+        setSuccess('Message sent successfully!')
+        setNickname('')
+        setMessage('')
+      } else {
+        setError(data.error || 'Failed to send message')
+      }
+    } catch {
+      setError('Network error. Is the API server running?')
+    }
+    setSubmitting(false)
+  }
+
   return (
     <section id="contact" style={{ padding: 'clamp(3rem, 8vh, 8rem) clamp(1.5rem, 5vw, 6em)' }}>
       <div className="container">
@@ -711,23 +788,23 @@ function ContactSection() {
           </BentoBox>
           
           <BentoBox>
-            <form style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+            <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+              {success && (
+                <div style={{ padding: '0.75rem', background: 'rgba(0, 245, 160, 0.1)', border: '1px solid var(--color-accent)', borderRadius: '4px', color: 'var(--color-accent)', fontSize: '0.875rem' }}>
+                  {success}
+                </div>
+              )}
+              {error && (
+                <div style={{ padding: '0.75rem', background: 'rgba(255, 68, 68, 0.1)', border: '1px solid #ff4444', borderRadius: '4px', color: '#ff4444', fontSize: '0.875rem' }}>
+                  {error}
+                </div>
+              )}
               <input
                 type="text"
-                placeholder="Name"
-                style={{
-                  padding: '1rem',
-                  border: '1px solid var(--color-border)',
-                  borderRadius: '4px',
-                  background: 'transparent',
-                  color: 'var(--color-text)',
-                  fontSize: '1rem',
-                  fontFamily: 'inherit',
-                }}
-              />
-              <input
-                type="email"
-                placeholder="Email"
+                placeholder="Nickname"
+                value={nickname}
+                onChange={(e) => setNickname(e.target.value)}
+                required
                 style={{
                   padding: '1rem',
                   border: '1px solid var(--color-border)',
@@ -740,6 +817,9 @@ function ContactSection() {
               />
               <textarea
                 placeholder="Message"
+                value={message}
+                onChange={(e) => setMessage(e.target.value)}
+                required
                 rows={4}
                 style={{
                   padding: '1rem',
@@ -752,8 +832,9 @@ function ContactSection() {
                   resize: 'vertical',
                 }}
               />
-              <MagneticButton>Send Message</MagneticButton>
+              <MagneticButton>{submitting ? 'Sending...' : 'Send Message'}</MagneticButton>
             </form>
+
           </BentoBox>
         </div>
       </div>
@@ -762,10 +843,43 @@ function ContactSection() {
 }
 
 function Footer() {
+  const [visitCount, setVisitCount] = useState<number | null>(null)
+  const [visitLoading, setVisitLoading] = useState(true)
+  const [visitError, setVisitError] = useState(false)
+
+  useEffect(() => {
+    const controller = new AbortController()
+
+    const initVisits = async () => {
+      try {
+        await fetch(`${API_BASE}/visits.php`, {
+          method: 'POST',
+          signal: controller.signal,
+        })
+        const res = await fetch(`${API_BASE}/visits.php`, {
+          signal: controller.signal,
+        })
+        const data = await res.json()
+        if (data.count !== undefined) {
+          setVisitCount(data.count)
+        }
+      } catch {
+        if (!controller.signal.aborted) setVisitError(true)
+      }
+      setVisitLoading(false)
+    }
+
+    initVisits()
+    return () => controller.abort()
+  }, [])
+
   return (
     <footer style={{ padding: '3rem', borderTop: '1px solid var(--color-border)', textAlign: 'center' }}>
       <p style={{ fontSize: '0.875rem', color: 'var(--color-text-muted)', letterSpacing: '0.1em' }}>
         © {new Date().getFullYear()} Kironoa Roro
+      </p>
+      <p style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)', letterSpacing: '0.1em', marginTop: '0.75rem' }}>
+        {visitLoading ? 'Loading visits...' : visitError ? '' : `Total Visits: ${visitCount}`}
       </p>
     </footer>
   )
@@ -790,6 +904,7 @@ const navItems = [
   { label: 'Skills', id: 'skills' },
   { label: 'Experience', id: 'experience' },
   { label: 'About', id: 'about' },
+  { label: 'Messages', id: 'messages' },
   { label: 'Contact', id: 'contact' },
 ]
 
@@ -1069,6 +1184,7 @@ export default function Home() {
         <SkillsSection />
         <ExperienceSection />
         <AboutSection />
+        <MessagesSection />
         <ContactSection />
         <Footer />
       </PageTransition>
