@@ -301,7 +301,7 @@ function HeroSection({ theme, toggleTheme }: { theme: string; toggleTheme: () =>
         overflow: 'hidden',
       }}
     >
-      <motion.div style={{ y, opacity, display: 'flex', flexDirection: 'var(--hero-fd)', width: '100%', alignItems: 'center', gap: 'clamp(2rem, 5vw, 6rem)', position: 'relative', zIndex: 1 }}>
+      <motion.div style={{ y, opacity, display: 'flex', flexDirection: 'var(--hero-fd)' as any, width: '100%', alignItems: 'center', gap: 'clamp(2rem, 5vw, 6rem)', position: 'relative', zIndex: 1 }}>
         <div style={{ flex: 1, minWidth: 0 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 'clamp(1rem, 2vw, 2rem)', marginBottom: '2rem' }}>
             <img 
@@ -649,7 +649,7 @@ function ExperienceSection() {
   )
 }
 
-function MessagesSection() {
+function MessagesSection({ refreshKey = 0 }: { refreshKey?: number }) {
   const [messages, setMessages] = useState<{ id: number; nickname: string; message: string; created_at: string }[]>([])
 
   useEffect(() => {
@@ -657,7 +657,7 @@ function MessagesSection() {
       .then(res => res.json())
       .then(data => setMessages(Array.isArray(data) ? data : []))
       .catch(() => {})
-  }, [])
+  }, [refreshKey])
 
   return (
     <section id="messages" style={{ padding: 'clamp(3rem, 8vh, 8rem) clamp(1.5rem, 5vw, 6em)' }}>
@@ -692,7 +692,7 @@ function MessagesSection() {
   )
 }
 
-function ContactSection() {
+function ContactSection({ onMessageSent }: { onMessageSent?: () => void }) {
   const [nickname, setNickname] = useState('')
   const [message, setMessage] = useState('')
   const [submitting, setSubmitting] = useState(false)
@@ -716,6 +716,7 @@ function ContactSection() {
         setSuccess('Message sent successfully!')
         setNickname('')
         setMessage('')
+        onMessageSent?.()
       } else {
         setError(data.error || 'Failed to send message')
       }
@@ -1166,6 +1167,7 @@ export default function Home() {
   const [mounted, setMounted] = useState(false)
   const [theme, setTheme] = useState('dark')
   const [loading, setLoading] = useState(true)
+  const [messagesRefresh, setMessagesRefresh] = useState(0)
 
   useEffect(() => {
     const timer = setTimeout(() => setLoading(false), 1500)
@@ -1199,8 +1201,8 @@ export default function Home() {
         <SkillsSection />
         <ExperienceSection />
         <AboutSection />
-        <MessagesSection />
-        <ContactSection />
+        <MessagesSection refreshKey={messagesRefresh} />
+        <ContactSection onMessageSent={() => setMessagesRefresh(k => k + 1)} />
         <Footer />
       </PageTransition>
     </SmoothScroll>
