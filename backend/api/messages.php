@@ -44,7 +44,7 @@ switch ($method) {
             exit();
         }
 
-        if (!isset($input['passcode']) || $input['passcode'] !== '1234') {
+        if (!isset($input['passcode']) || $input['passcode'] !== '0712') {
             http_response_code(403);
             echo json_encode(['error' => 'Invalid passcode']);
             exit();

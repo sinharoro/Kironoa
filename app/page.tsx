@@ -652,6 +652,10 @@ function ExperienceSection() {
 function MessagesSection({ refreshKey = 0 }: { refreshKey?: number }) {
   const [messages, setMessages] = useState<{ id: number; nickname: string; message: string; created_at: string }[]>([])
   const [deleting, setDeleting] = useState<number | null>(null)
+  const [showModal, setShowModal] = useState(false)
+  const [pendingId, setPendingId] = useState<number | null>(null)
+  const [passcodeInput, setPasscodeInput] = useState('')
+  const [passcodeError, setPasscodeError] = useState('')
 
   const fetchMessages = useCallback(() => {
     fetch(`${API_BASE}/messages.php`, { cache: 'no-store', headers: { 'ngrok-skip-browser-warning': 'true' } })
@@ -662,19 +666,28 @@ function MessagesSection({ refreshKey = 0 }: { refreshKey?: number }) {
 
   useEffect(() => { fetchMessages() }, [fetchMessages, refreshKey])
 
-  const handleDelete = (id: number) => {
-    const passcode = prompt('Enter 4-digit passcode to delete:')
-    if (!passcode || passcode.length !== 4) return
+  const openDeleteModal = (id: number) => {
+    setPendingId(id)
+    setPasscodeInput('')
+    setPasscodeError('')
+    setShowModal(true)
+  }
+
+  const confirmDelete = () => {
+    if (passcodeInput.length !== 4) return
+    const id = pendingId
+    if (id === null) return
+    setShowModal(false)
     setDeleting(id)
     fetch(`${API_BASE}/messages.php`, {
       method: 'DELETE',
       headers: { 'Content-Type': 'application/json', 'ngrok-skip-browser-warning': 'true' },
-      body: JSON.stringify({ id, passcode }),
+      body: JSON.stringify({ id, passcode: passcodeInput }),
     })
       .then(res => res.json())
       .then(data => {
         if (data.success) fetchMessages()
-        else alert(data.error || 'Failed to delete')
+        else setPasscodeError(data.error || 'Failed to delete')
       })
       .catch(() => alert('Network error'))
       .finally(() => setDeleting(null))
@@ -704,7 +717,7 @@ function MessagesSection({ refreshKey = 0 }: { refreshKey?: number }) {
                         {formatTime(msg.created_at)}
                       </span>
                       <button
-                        onClick={() => handleDelete(msg.id)}
+                        onClick={() => openDeleteModal(msg.id)}
                         disabled={deleting === msg.id}
                         style={{
                           background: 'none',
@@ -732,6 +745,109 @@ function MessagesSection({ refreshKey = 0 }: { refreshKey?: number }) {
           )}
         </BentoBox>
       </div>
+
+      {showModal && (
+        <div
+          onClick={() => setShowModal(false)}
+          style={{
+            position: 'fixed',
+            inset: 0,
+            background: 'rgba(0,0,0,0.6)',
+            backdropFilter: 'blur(4px)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            zIndex: 9999,
+          }}
+        >
+          <div
+            onClick={(e) => e.stopPropagation()}
+            style={{
+              background: 'var(--color-bg-alt)',
+              border: '1px solid var(--color-border)',
+              borderRadius: '12px',
+              padding: '2rem',
+              width: 'clamp(280px, 90vw, 360px)',
+              boxShadow: '0 20px 60px rgba(0,0,0,0.3)',
+            }}
+          >
+            <h3 style={{ margin: '0 0 0.5rem', fontSize: '1.1rem', color: 'var(--color-text)' }}>
+              Delete Message
+            </h3>
+            <p style={{ margin: '0 0 1.25rem', fontSize: '0.85rem', color: 'var(--color-text-muted)' }}>
+              Enter the 4-digit passcode
+            </p>
+            <input
+              type="password"
+              maxLength={4}
+              inputMode="numeric"
+              pattern="[0-9]*"
+              value={passcodeInput}
+              onChange={(e) => {
+                setPasscodeInput(e.target.value.replace(/\D/g, '').slice(0, 4))
+                setPasscodeError('')
+              }}
+              onKeyDown={(e) => e.key === 'Enter' && confirmDelete()}
+              autoFocus
+              style={{
+                width: '100%',
+                padding: '0.85rem',
+                border: `1px solid ${passcodeError ? 'var(--color-accent)' : 'var(--color-border)'}`,
+                borderRadius: '8px',
+                background: 'var(--color-bg)',
+                color: 'var(--color-text)',
+                fontSize: '1.5rem',
+                textAlign: 'center',
+                letterSpacing: '0.5em',
+                fontFamily: 'monospace',
+                outline: 'none',
+                boxSizing: 'border-box',
+              }}
+            />
+            {passcodeError && (
+              <p style={{ margin: '0.5rem 0 0', fontSize: '0.75rem', color: '#ff4444' }}>
+                {passcodeError}
+              </p>
+            )}
+            <div style={{ display: 'flex', gap: '0.75rem', marginTop: '1.25rem' }}>
+              <button
+                onClick={() => setShowModal(false)}
+                style={{
+                  flex: 1,
+                  padding: '0.75rem',
+                  borderRadius: '8px',
+                  border: '1px solid var(--color-border)',
+                  background: 'transparent',
+                  color: 'var(--color-text-muted)',
+                  cursor: 'pointer',
+                  fontSize: '0.875rem',
+                  fontFamily: 'inherit',
+                }}
+              >
+                Cancel
+              </button>
+              <button
+                onClick={confirmDelete}
+                disabled={passcodeInput.length !== 4}
+                style={{
+                  flex: 1,
+                  padding: '0.75rem',
+                  borderRadius: '8px',
+                  border: 'none',
+                  background: passcodeInput.length === 4 ? 'var(--color-accent)' : 'var(--color-border)',
+                  color: passcodeInput.length === 4 ? 'var(--color-bg)' : 'var(--color-text-muted)',
+                  cursor: passcodeInput.length === 4 ? 'pointer' : 'not-allowed',
+                  fontSize: '0.875rem',
+                  fontWeight: 600,
+                  fontFamily: 'inherit',
+                }}
+              >
+                Delete
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </section>
   )
 }
