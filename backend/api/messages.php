@@ -44,6 +44,12 @@ switch ($method) {
             exit();
         }
 
+        if (!isset($input['passcode']) || $input['passcode'] !== '1234') {
+            http_response_code(403);
+            echo json_encode(['error' => 'Invalid passcode']);
+            exit();
+        }
+
         $stmt = $pdo->prepare('DELETE FROM messages WHERE id = :id');
         $stmt->execute(['id' => $input['id']]);
 

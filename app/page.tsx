@@ -651,13 +651,39 @@ function ExperienceSection() {
 
 function MessagesSection({ refreshKey = 0 }: { refreshKey?: number }) {
   const [messages, setMessages] = useState<{ id: number; nickname: string; message: string; created_at: string }[]>([])
+  const [deleting, setDeleting] = useState<number | null>(null)
 
-  useEffect(() => {
+  const fetchMessages = useCallback(() => {
     fetch(`${API_BASE}/messages.php`, { cache: 'no-store', headers: { 'ngrok-skip-browser-warning': 'true' } })
       .then(res => res.json())
       .then(data => setMessages(Array.isArray(data) ? data : []))
       .catch(() => {})
-  }, [refreshKey])
+  }, [])
+
+  useEffect(() => { fetchMessages() }, [fetchMessages, refreshKey])
+
+  const handleDelete = (id: number) => {
+    const passcode = prompt('Enter 4-digit passcode to delete:')
+    if (!passcode || passcode.length !== 4) return
+    setDeleting(id)
+    fetch(`${API_BASE}/messages.php`, {
+      method: 'DELETE',
+      headers: { 'Content-Type': 'application/json', 'ngrok-skip-browser-warning': 'true' },
+      body: JSON.stringify({ id, passcode }),
+    })
+      .then(res => res.json())
+      .then(data => {
+        if (data.success) fetchMessages()
+        else alert(data.error || 'Failed to delete')
+      })
+      .catch(() => alert('Network error'))
+      .finally(() => setDeleting(null))
+  }
+
+  const formatTime = (dateStr: string) => {
+    const d = new Date(dateStr)
+    return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit' })
+  }
 
   return (
     <section id="messages" style={{ padding: 'clamp(3rem, 8vh, 8rem) clamp(1.5rem, 5vw, 6em)' }}>
@@ -668,14 +694,32 @@ function MessagesSection({ refreshKey = 0 }: { refreshKey?: number }) {
 
         <BentoBox>
           {messages.length > 0 ? (
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', maxHeight: '400px', overflowY: 'auto' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
               {messages.map((msg) => (
                 <div key={msg.id} style={{ padding: '0.75rem', background: 'var(--color-bg)', border: '1px solid var(--color-border)', borderRadius: '4px' }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.25rem' }}>
                     <span style={{ fontWeight: 600, fontSize: '0.875rem', color: 'var(--color-accent)' }}>{msg.nickname}</span>
-                    <span style={{ fontSize: '0.7rem', color: 'var(--color-text-muted)' }}>
-                      {new Date(msg.created_at).toLocaleDateString()}
-                    </span>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                      <span style={{ fontSize: '0.7rem', color: 'var(--color-text-muted)' }}>
+                        {formatTime(msg.created_at)}
+                      </span>
+                      <button
+                        onClick={() => handleDelete(msg.id)}
+                        disabled={deleting === msg.id}
+                        style={{
+                          background: 'none',
+                          border: '1px solid var(--color-border)',
+                          borderRadius: '4px',
+                          color: 'var(--color-text-muted)',
+                          cursor: 'pointer',
+                          fontSize: '0.7rem',
+                          padding: '2px 6px',
+                          opacity: deleting === msg.id ? 0.5 : 1,
+                        }}
+                      >
+                        {deleting === msg.id ? '...' : '✕'}
+                      </button>
+                    </div>
                   </div>
                   <p style={{ fontSize: '0.875rem', color: 'var(--color-text-muted)', lineHeight: 1.5 }}>{msg.message}</p>
                 </div>
@@ -908,8 +952,8 @@ const navItems = [
   { label: 'Skills', id: 'skills' },
   { label: 'Experience', id: 'experience' },
   { label: 'About', id: 'about' },
-  { label: 'Messages', id: 'messages' },
   { label: 'Contact', id: 'contact' },
+  { label: 'Messages', id: 'messages' },
 ]
 
 const FloatingClock = memo(function FloatingClock({ theme }: { theme: string }) {
@@ -1203,8 +1247,8 @@ export default function Home() {
         <SkillsSection />
         <ExperienceSection />
         <AboutSection />
-        <MessagesSection refreshKey={messagesRefresh} />
         <ContactSection onMessageSent={() => setMessagesRefresh(k => k + 1)} />
+        <MessagesSection refreshKey={messagesRefresh} />
         <Footer />
       </PageTransition>
     </SmoothScroll>
