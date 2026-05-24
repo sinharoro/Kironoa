@@ -653,7 +653,7 @@ function MessagesSection({ refreshKey = 0 }: { refreshKey?: number }) {
   const [messages, setMessages] = useState<{ id: number; nickname: string; message: string; created_at: string }[]>([])
 
   useEffect(() => {
-    fetch(`${API_BASE}/messages.php`)
+    fetch(`${API_BASE}/messages.php`, { cache: 'no-store', headers: { 'ngrok-skip-browser-warning': 'true' } })
       .then(res => res.json())
       .then(data => setMessages(Array.isArray(data) ? data : []))
       .catch(() => {})
@@ -708,7 +708,7 @@ function ContactSection({ onMessageSent }: { onMessageSent?: () => void }) {
     try {
       const res = await fetch(`${API_BASE}/messages.php`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', 'ngrok-skip-browser-warning': 'true' },
         body: JSON.stringify({ nickname, message }),
       })
       const data = await res.json()
@@ -857,9 +857,11 @@ function Footer() {
         await fetch(`${API_BASE}/visits.php`, {
           method: 'POST',
           signal: controller.signal,
+          headers: { 'ngrok-skip-browser-warning': 'true' },
         })
         const res = await fetch(`${API_BASE}/visits.php`, {
           signal: controller.signal,
+          headers: { 'ngrok-skip-browser-warning': 'true' },
         })
         const data = await res.json()
         if (data.count !== undefined) {
