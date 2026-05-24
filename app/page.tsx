@@ -677,7 +677,6 @@ function MessagesSection({ refreshKey = 0 }: { refreshKey?: number }) {
     if (passcodeInput.length !== 4) return
     const id = pendingId
     if (id === null) return
-    setShowModal(false)
     setDeleting(id)
     fetch(`${API_BASE}/messages.php`, {
       method: 'DELETE',
@@ -686,10 +685,16 @@ function MessagesSection({ refreshKey = 0 }: { refreshKey?: number }) {
     })
       .then(res => res.json())
       .then(data => {
-        if (data.success) fetchMessages()
-        else setPasscodeError(data.error || 'Failed to delete')
+        if (data.success) {
+          setShowModal(false)
+          fetchMessages()
+        } else {
+          setPasscodeError(data.error || 'Failed to delete')
+        }
       })
-      .catch(() => alert('Network error'))
+      .catch(() => {
+        setPasscodeError('Network error')
+      })
       .finally(() => setDeleting(null))
   }
 
