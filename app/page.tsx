@@ -1269,34 +1269,29 @@ const ThemeToggle = memo(function ThemeToggle({ theme }: { theme: string }) {
       <div
         style={{
           position: 'fixed',
-          top: 0,
-          left: 0,
-          width: '100%',
-          height: '100%',
+          top: 0, left: 0, width: '100%', height: '100%',
           zIndex: -3,
           backgroundImage: `url('/images/saobg.jpg')`,
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
+          backgroundSize: 'cover', backgroundPosition: 'center',
           opacity: isLight ? 0 : 1,
           transition: 'opacity 0.8s ease',
         }}
       />
-      <div
-        style={{
-          position: 'fixed',
-          top: 0,
-          left: 0,
-          width: '100%',
-          height: '100%',
-          zIndex: -2,
-          backgroundImage: `url(${backgrounds[bgIndex]})`,
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          opacity: isLight ? 1 : 0,
-          transition: 'opacity 0.8s ease, background-image 1s ease-in-out',
-          willChange: 'opacity',
-        }}
-      />
+      {backgrounds.map((bg, i) => (
+        <div
+          key={bg}
+          style={{
+            position: 'fixed',
+            top: 0, left: 0, width: '100%', height: '100%',
+            zIndex: -2,
+            backgroundImage: `url(${bg})`,
+            backgroundSize: 'cover', backgroundPosition: 'center',
+            opacity: isLight && i === bgIndex ? 1 : 0,
+            transition: 'opacity 1.2s ease-in-out',
+            willChange: 'opacity',
+          }}
+        />
+      ))}
     </>
   )
 })
