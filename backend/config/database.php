@@ -1,8 +1,15 @@
 <?php
 header('Content-Type: application/json');
-header('Access-Control-Allow-Origin: http://localhost:3000');
+$allowed_origins = ['http://localhost:3000', 'https://kironoa.vercel.app'];
+$origin = $_SERVER['HTTP_ORIGIN'] ?? '';
+if (preg_match('/\.ngrok-free\.dev$/', $origin)) {
+    $allowed_origins[] = $origin;
+}
+if (in_array($origin, $allowed_origins, true)) {
+    header("Access-Control-Allow-Origin: $origin");
+}
 header('Access-Control-Allow-Methods: GET, POST, DELETE, OPTIONS');
-header('Access-Control-Allow-Headers: Content-Type');
+header('Access-Control-Allow-Headers: Content-Type, ngrok-skip-browser-warning');
 
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     http_response_code(200);

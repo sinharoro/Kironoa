@@ -4,7 +4,7 @@ import { useEffect, useRef, useState, useCallback, memo } from 'react'
 import { motion, useScroll, useTransform, useSpring, useInView, AnimatePresence } from 'framer-motion'
 import Lenis from 'lenis'
 
-const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost/kironoa-api/api'
+const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api'
 
 const aboutBio = `Crafting digital experiences with precision and intention. Based in Misamis Occidental, Philippines.`
 
@@ -706,7 +706,7 @@ function ContactSection() {
     setError('')
 
     try {
-      const res = await fetch(`http://localhost/final-exam/save_message.php`, {
+      const res = await fetch(`${API_BASE}/messages.php`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ nickname, message }),
