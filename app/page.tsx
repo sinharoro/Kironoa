@@ -377,17 +377,35 @@ function HeroSection({ theme, toggleTheme }: { theme: string; toggleTheme: () =>
             flexShrink: 0,
           }}>
             <img 
-              src={theme === 'dark' ? '/images/Kironoa.png' : '/images/KironoaL.png'} 
+              src='/images/Kironoa.png' 
               alt="Kironoa Roro" 
               width={320}
               height={320}
               loading="eager"
               style={{
-                width: '100%',
-                height: '100%',
+                position: 'absolute', inset: 0,
+                width: '100%', height: '100%',
                 objectFit: 'cover',
                 borderRadius: '50%',
                 border: '1px solid var(--color-border)',
+                opacity: theme === 'dark' ? 1 : 0,
+                transition: 'opacity 0.6s ease-in-out',
+              }}
+            />
+            <img 
+              src='/images/KironoaL.png' 
+              alt="Kironoa Roro Light" 
+              width={320}
+              height={320}
+              loading="eager"
+              style={{
+                position: 'absolute', inset: 0,
+                width: '100%', height: '100%',
+                objectFit: 'cover',
+                borderRadius: '50%',
+                border: '1px solid var(--color-border)',
+                opacity: theme === 'light' ? 1 : 0,
+                transition: 'opacity 0.6s ease-in-out',
               }}
             />
           </div>
