@@ -1287,8 +1287,9 @@ const ThemeToggle = memo(function ThemeToggle({ theme }: { theme: string }) {
             backgroundImage: `url(${bg})`,
             backgroundSize: 'cover', backgroundPosition: 'center',
             opacity: isLight && i === bgIndex ? 1 : 0,
-            transition: 'opacity 1.2s ease-in-out',
+            transition: 'opacity 1s ease-in-out',
             willChange: 'opacity',
+            transform: 'translateZ(0)',
           }}
         />
       ))}
