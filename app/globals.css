@@ -22,6 +22,24 @@
   --hero-fd: row;
   --hero-img-order: 0;
   --hero-section-padding: 0 clamp(3rem, 6vw, 6rem);
+  --hero-gap: clamp(2rem, 5vw, 6rem);
+  --stats-number-size: 4rem;
+  --section-title-size: 2rem;
+  --section-title-mb: 3rem;
+  --bento-padding: 2rem;
+  --skill-name-size: 1.5rem;
+  --experience-role-size: 1.5rem;
+  --section-py: clamp(3rem, 8vh, 8rem);
+  --footer-padding: 3rem;
+  --btn-py: 1rem;
+  --btn-px: 2rem;
+  --social-gap: 2rem;
+  --experience-gap: 2rem;
+  --profile-img-size: clamp(180px, 25vw, 320px);
+  --nav-font-size: clamp(0.6rem, 2vw, 0.8rem);
+  --nav-btn-py: clamp(0.4rem, 1.5vw, 0.6rem);
+  --nav-btn-px: clamp(0.5rem, 2vw, 1.25rem);
+  --nav-gap: clamp(0.1rem, 1vw, 0.25rem);
 }
 
 [data-theme="light"] {
@@ -116,10 +134,13 @@ button {
   cursor: none;
   border: none;
   background: none;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
 }
 
 input, textarea {
   cursor: none;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .container {
@@ -132,7 +153,7 @@ input, textarea {
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  padding: 1rem 2rem;
+  padding: var(--btn-py) var(--btn-px);
   border: 1px solid var(--color-accent);
   border-radius: 4px;
   font-size: 0.875rem;
@@ -256,6 +277,24 @@ input, textarea {
   :root {
     --skills-grid: repeat(2, 1fr);
     --experience-grid: 1fr;
+    --stats-number-size: 3rem;
+    --section-title-size: 1.5rem;
+    --section-title-mb: 2rem;
+    --bento-padding: 1.5rem;
+    --footer-padding: 2rem;
+    --btn-py: 0.85rem;
+    --btn-px: 1.5rem;
+    --social-gap: 1.5rem;
+    --profile-img-size: clamp(160px, 30vw, 280px);
+    --nav-font-size: clamp(0.55rem, 1.8vw, 0.7rem);
+    --nav-btn-py: clamp(0.35rem, 1.2vw, 0.5rem);
+    --nav-btn-px: clamp(0.4rem, 1.5vw, 1rem);
+    --nav-gap: clamp(0.08rem, 0.8vw, 0.2rem);
+    --section-py: clamp(2.5rem, 6vh, 6rem);
+    --experience-gap: 1.5rem;
+    --hero-gap: clamp(1.5rem, 4vw, 4rem);
+    --skill-name-size: 1.25rem;
+    --experience-role-size: 1.25rem;
   }
 
   .cursor-dot, .cursor-ring {
@@ -275,7 +314,8 @@ input, textarea {
   }
   
   .section-title {
-    font-size: 1.5rem;
+    font-size: var(--section-title-size);
+    margin-bottom: var(--section-title-mb);
   }
 
   h1 {
@@ -297,5 +337,34 @@ input, textarea {
     --hero-fd: column;
     --hero-img-order: -1;
     --hero-section-padding: 0 1.5rem;
+    --stats-number-size: 2.5rem;
+    --bento-padding: 1.25rem;
+    --footer-padding: 1.5rem;
+    --social-gap: 1rem;
+    --profile-img-size: clamp(140px, 50vw, 200px);
+    --nav-font-size: clamp(0.5rem, 1.5vw, 0.6rem);
+    --nav-btn-py: 0.3rem;
+    --nav-btn-px: 0.4rem;
+    --section-py: clamp(2rem, 5vh, 4rem);
+    --experience-gap: 1rem;
+  }
+}
+
+@media (max-width: 360px) {
+  :root {
+    --stats-number-size: 2rem;
+    --bento-padding: 1rem;
+    --footer-padding: 1.25rem;
+    --social-gap: 0.75rem;
+    --profile-img-size: 120px;
+    --nav-font-size: 0.45rem;
+    --nav-btn-py: 0.25rem;
+    --nav-btn-px: 0.3rem;
+    --nav-gap: 0.05rem;
+    --section-py: 1.5rem;
+  }
+
+  .container {
+    padding: 0 0.75rem;
   }
 }

@@ -137,7 +137,7 @@ return (
           <span 
             ref={textRef}
             style={{
-              color: '#000000',
+              color: 'var(--color-text)',
               fontSize: '0.65rem',
               fontWeight: 700,
               letterSpacing: '0.08em',
@@ -272,7 +272,7 @@ const BentoBox = memo(function BentoBox({ children, className = '', style }: { c
         ...style,
         border: '1px solid var(--color-border)',
         borderRadius: '8px',
-        padding: '2rem',
+        padding: 'var(--bento-padding)',
         background: 'var(--color-bg-alt)',
         transition: 'border-color 0.3s, box-shadow 0.3s',
         willChange: 'transform, opacity',
@@ -301,7 +301,7 @@ function HeroSection({ theme, toggleTheme }: { theme: string; toggleTheme: () =>
         overflow: 'hidden',
       }}
     >
-      <motion.div style={{ y, opacity, display: 'flex', flexDirection: 'var(--hero-fd)' as any, width: '100%', alignItems: 'center', gap: 'clamp(2rem, 5vw, 6rem)', position: 'relative', zIndex: 1 }}>
+      <motion.div style={{ y, opacity, display: 'flex', flexDirection: 'var(--hero-fd)' as any, width: '100%', alignItems: 'center', gap: 'var(--hero-gap)', position: 'relative', zIndex: 1 }}>
         <div style={{ flex: 1, minWidth: 0 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 'clamp(1rem, 2vw, 2rem)', marginBottom: '2rem' }}>
             <img 
@@ -372,8 +372,8 @@ function HeroSection({ theme, toggleTheme }: { theme: string; toggleTheme: () =>
         }}>
           <div style={{
             position: 'relative',
-            width: 'clamp(180px, 25vw, 320px)',
-            height: 'clamp(180px, 25vw, 320px)',
+            width: 'var(--profile-img-size)',
+            height: 'var(--profile-img-size)',
             flexShrink: 0,
           }}>
             <img 
@@ -417,7 +417,7 @@ function HeroSection({ theme, toggleTheme }: { theme: string; toggleTheme: () =>
 
 function AboutSection() {
   return (
-    <section id="about" style={{ padding: 'clamp(3rem, 8vh, 8rem) clamp(1.5rem, 5vw, 6em)' }}>
+    <section id="about" style={{ padding: 'var(--section-py) clamp(1.5rem, 5vw, 6em)' }}>
       <div className="container">
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
           <TextReveal>
@@ -447,11 +447,11 @@ function AboutSection() {
 
         <div style={{ display: 'grid', gridTemplateColumns: 'var(--about-stats-grid)', gap: '1.5rem', marginTop: '1.5rem' }}>
           <BentoBox>
-            <p style={{ fontSize: '4rem', fontWeight: 800, color: 'var(--color-accent)', marginBottom: '0.5rem' }}>2+</p>
+            <p style={{ fontSize: 'var(--stats-number-size)', fontWeight: 800, color: 'var(--color-accent)', marginBottom: '0.5rem' }}>2+</p>
             <p style={{ fontSize: '0.875rem', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Months Experience</p>
           </BentoBox>
           <BentoBox>
-            <p style={{ fontSize: '4rem', fontWeight: 800, color: 'var(--color-accent)', marginBottom: '0.5rem' }}>10+</p>
+            <p style={{ fontSize: 'var(--stats-number-size)', fontWeight: 800, color: 'var(--color-accent)', marginBottom: '0.5rem' }}>10+</p>
             <p style={{ fontSize: '0.875rem', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Projects Completed</p>
           </BentoBox>
         </div>
@@ -462,6 +462,7 @@ function AboutSection() {
 
 function ProjectShowcaseBox({ project, index, theme }: { project: typeof projects[0]; index: number; theme: string }) {
   const [isHovered, setIsHovered] = useState(false)
+  const [isShowcase, setIsShowcase] = useState(false)
 
   return (
     <motion.div
@@ -473,7 +474,13 @@ function ProjectShowcaseBox({ project, index, theme }: { project: typeof project
       viewport={{ once: true, margin: '-50px' }}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
-      onClick={() => project.link && window.open(project.link, '_blank')}
+      onClick={() => {
+        if (isShowcase || isHovered) {
+          project.link && window.open(project.link, '_blank')
+        } else {
+          setIsShowcase(true)
+        }
+      }}
       style={{
         position: 'relative',
         border: '1px solid var(--color-border)',
@@ -484,7 +491,7 @@ function ProjectShowcaseBox({ project, index, theme }: { project: typeof project
         aspectRatio: '4/3',
       }}
     >
-      {isHovered && project.showcase ? (
+      {(isHovered || isShowcase) && project.showcase ? (
         <img
           src={project.showcase}
           alt="Showcase"
@@ -506,7 +513,7 @@ function ProjectShowcaseBox({ project, index, theme }: { project: typeof project
           alignItems: 'center',
           justifyContent: 'center',
           gap: '1rem',
-          padding: '2rem',
+          padding: 'var(--bento-padding)',
         }}>
           {project.logo && (
             <img 
@@ -516,8 +523,8 @@ function ProjectShowcaseBox({ project, index, theme }: { project: typeof project
               height={120}
               loading="lazy"
               style={{
-                width: '120px',
-                height: '120px',
+                width: 'min(120px, 40vw)',
+                height: 'min(120px, 40vw)',
                 objectFit: 'contain',
                 borderRadius: '12px',
               }}
@@ -557,7 +564,7 @@ function ProjectShowcaseBox({ project, index, theme }: { project: typeof project
             letterSpacing: '0.1em',
             opacity: 0.6,
           }}>
-            Hover to explore
+            Tap to preview
           </span>
         </div>
       )}
@@ -574,7 +581,7 @@ function ProjectsSection() {
   }, [])
 
   return (
-    <section id="projects" style={{ padding: 'clamp(3rem, 8vh, 8rem) clamp(1.5rem, 5vw, 6em)', background: 'var(--color-bg-alt)' }}>
+    <section id="projects" style={{ padding: 'var(--section-py) clamp(1.5rem, 5vw, 6em)', background: 'var(--color-bg-alt)' }}>
       <div className="container">
         <TextReveal>
           <h2 className="section-title">Projects</h2>
@@ -601,7 +608,7 @@ function ProjectsSection() {
 
 function SkillsSection() {
   return (
-    <section id="skills" style={{ padding: 'clamp(3rem, 8vh, 8rem) clamp(1.5rem, 5vw, 6em)' }}>
+    <section id="skills" style={{ padding: 'var(--section-py) clamp(1.5rem, 5vw, 6em)' }}>
       <div className="container">
         <TextReveal>
           <h2 className="section-title">Skills</h2>
@@ -615,8 +622,8 @@ function SkillsSection() {
           {skills.map((skill, index) => (
             <BentoBox key={skill.name}>
               <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '1rem' }}>
-                <span style={{ fontSize: '1.5rem', fontWeight: 600 }}>{skill.name}</span>
-                <span style={{ color: 'var(--color-accent)', fontSize: '1.5rem', fontWeight: 700 }}>{skill.level}%</span>
+                <span style={{ fontSize: 'var(--skill-name-size)', fontWeight: 600 }}>{skill.name}</span>
+                <span style={{ color: 'var(--color-accent)', fontSize: 'var(--skill-name-size)', fontWeight: 700 }}>{skill.level}%</span>
               </div>
               <div style={{
                 height: '4px',
@@ -645,7 +652,7 @@ function SkillsSection() {
 
 function ExperienceSection() {
   return (
-    <section id="experience" style={{ padding: 'clamp(3rem, 8vh, 8rem) clamp(1.5rem, 5vw, 6em)', background: 'var(--color-bg-alt)' }}>
+    <section id="experience" style={{ padding: 'var(--section-py) clamp(1.5rem, 5vw, 6em)', background: 'var(--color-bg-alt)' }}>
       <div className="container">
         <TextReveal>
           <h2 className="section-title">Experience</h2>
@@ -653,10 +660,10 @@ function ExperienceSection() {
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
           {experiences.map((exp, index) => (
-            <BentoBox key={exp.role} style={{ display: 'grid', gridTemplateColumns: 'var(--experience-grid)', gap: '2rem', alignItems: 'center' }}>
+            <BentoBox key={exp.role} style={{ display: 'grid', gridTemplateColumns: 'var(--experience-grid)', gap: 'var(--experience-gap)', alignItems: 'center' }}>
               <span style={{ color: 'var(--color-text-muted)', fontSize: '0.875rem' }}>{exp.period}</span>
               <div>
-                <h3 style={{ fontSize: '1.5rem', fontWeight: 600, marginBottom: '0.25rem' }}>{exp.role}</h3>
+                <h3 style={{ fontSize: 'var(--experience-role-size)', fontWeight: 600, marginBottom: '0.25rem' }}>{exp.role}</h3>
                 <p style={{ color: 'var(--color-accent)' }}>{exp.company}</p>
               </div>
             </BentoBox>
@@ -722,7 +729,7 @@ function MessagesSection({ refreshKey = 0 }: { refreshKey?: number }) {
   }
 
   return (
-    <section id="messages" style={{ padding: 'clamp(3rem, 8vh, 8rem) clamp(1.5rem, 5vw, 6em)' }}>
+    <section id="messages" style={{ padding: 'var(--section-py) clamp(1.5rem, 5vw, 6em)' }}>
       <div className="container">
         <TextReveal>
           <h2 className="section-title">Messages</h2>
@@ -733,10 +740,10 @@ function MessagesSection({ refreshKey = 0 }: { refreshKey?: number }) {
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
               {messages.map((msg) => (
                 <div key={msg.id} style={{ padding: '0.75rem', background: 'var(--color-bg)', border: '1px solid var(--color-border)', borderRadius: '4px' }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.25rem' }}>
-                    <span style={{ fontWeight: 600, fontSize: '0.875rem', color: 'var(--color-accent)' }}>{msg.nickname}</span>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                      <span style={{ fontSize: '0.7rem', color: 'var(--color-text-muted)' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '0.25rem', gap: '0.5rem' }}>
+                    <span style={{ fontWeight: 600, fontSize: '0.875rem', color: 'var(--color-accent)', minWidth: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{msg.nickname}</span>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flexShrink: 0 }}>
+                      <span style={{ fontSize: '0.65rem', color: 'var(--color-text-muted)', whiteSpace: 'nowrap' }}>
                         {formatTime(msg.created_at)}
                       </span>
                       <button
@@ -748,9 +755,14 @@ function MessagesSection({ refreshKey = 0 }: { refreshKey?: number }) {
                           borderRadius: '4px',
                           color: 'var(--color-text-muted)',
                           cursor: 'pointer',
-                          fontSize: '0.7rem',
-                          padding: '2px 6px',
+                          fontSize: '0.75rem',
+                          padding: '6px 10px',
                           opacity: deleting === msg.id ? 0.5 : 1,
+                          minWidth: '32px',
+                          minHeight: '32px',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
                         }}
                       >
                         {deleting === msg.id ? '...' : '✕'}
@@ -910,7 +922,7 @@ function ContactSection({ onMessageSent }: { onMessageSent?: () => void }) {
   }
 
   return (
-    <section id="contact" style={{ padding: 'clamp(3rem, 8vh, 8rem) clamp(1.5rem, 5vw, 6em)' }}>
+    <section id="contact" style={{ padding: 'var(--section-py) clamp(1.5rem, 5vw, 6em)' }}>
       <div className="container">
         <TextReveal>
           <h2 className="section-title">Contact</h2>
@@ -921,7 +933,7 @@ function ContactSection({ onMessageSent }: { onMessageSent?: () => void }) {
             <p style={{ fontSize: '1.125rem', lineHeight: 1.7, color: 'var(--color-text-muted)', marginBottom: '2rem' }}>
               Available for freelance projects and collaborations. Let's create something remarkable together.
             </p>
-            <div style={{ display: 'flex', gap: '2rem' }}>
+            <div style={{ display: 'flex', gap: 'var(--social-gap)', flexWrap: 'wrap' }}>
               {[
                 { 
                   name: 'Facebook', 
@@ -1061,7 +1073,7 @@ function Footer() {
   }, [])
 
   return (
-    <footer style={{ padding: '3rem', borderTop: '1px solid var(--color-border)', textAlign: 'center' }}>
+    <footer style={{ padding: 'var(--footer-padding)', borderTop: '1px solid var(--color-border)', textAlign: 'center' }}>
       <p style={{ fontSize: '0.875rem', color: 'var(--color-text-muted)', letterSpacing: '0.1em' }}>
         © {new Date().getFullYear()} Kironoa Roro
       </p>
@@ -1214,7 +1226,7 @@ function FloatingNav() {
       left: '50%',
       transform: 'translateX(-50%)',
       display: 'flex',
-      gap: 'clamp(0.1rem, 1vw, 0.25rem)',
+      gap: 'var(--nav-gap)',
       padding: 'clamp(0.3rem, 1vw, 0.5rem)',
       background: 'rgba(8, 12, 11, 0.4)',
       border: '1px solid var(--color-border)',
@@ -1239,12 +1251,12 @@ function FloatingNav() {
           key={item.id}
           onClick={() => scrollToSection(item.id)}
           style={{
-            padding: 'clamp(0.4rem, 1.5vw, 0.6rem) clamp(0.5rem, 2vw, 1.25rem)',
+            padding: 'var(--nav-btn-py) var(--nav-btn-px)',
             borderRadius: '50px',
             border: 'none',
             background: 'transparent',
             color: 'rgba(255, 255, 255, 0.5)',
-            fontSize: 'clamp(0.6rem, 2vw, 0.8rem)',
+            fontSize: 'var(--nav-font-size)',
             fontWeight: 500,
             cursor: 'pointer',
             transition: 'all 0.3s ease',
