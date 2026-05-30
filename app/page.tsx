@@ -1228,12 +1228,12 @@ function FloatingNav() {
       display: 'flex',
       gap: 'var(--nav-gap)',
       padding: 'clamp(0.3rem, 1vw, 0.5rem)',
-      background: 'rgba(8, 12, 11, 0.4)',
+      background: 'rgba(8, 12, 11, 0.6)',
       border: '1px solid var(--color-border)',
       borderRadius: '50px',
       backdropFilter: 'blur(10px)',
       zIndex: 100,
-      opacity: 0.7,
+      opacity: 1,
       transition: 'opacity 0.3s ease',
       flexWrap: 'wrap',
       justifyContent: 'center',
@@ -1243,7 +1243,7 @@ function FloatingNav() {
       e.currentTarget.style.opacity = '1'
     }}
     onMouseLeave={(e) => {
-      e.currentTarget.style.opacity = '0.7'
+      e.currentTarget.style.opacity = '1'
     }}
     >
       {navItems.map((item) => (
@@ -1255,12 +1255,12 @@ function FloatingNav() {
             borderRadius: '50px',
             border: 'none',
             background: 'transparent',
-            color: 'rgba(255, 255, 255, 0.5)',
+            color: 'rgba(255, 255, 255, 0.75)',
             fontSize: 'var(--nav-font-size)',
             fontWeight: 500,
             cursor: 'pointer',
             transition: 'all 0.3s ease',
-            opacity: 0.7,
+            opacity: 1,
             whiteSpace: 'nowrap',
           }}
           onMouseEnter={(e) => {
@@ -1270,8 +1270,8 @@ function FloatingNav() {
           }}
           onMouseLeave={(e) => {
             e.currentTarget.style.background = 'transparent'
-            e.currentTarget.style.color = 'rgba(255, 255, 255, 0.5)'
-            e.currentTarget.style.opacity = '0.7'
+            e.currentTarget.style.color = 'rgba(255, 255, 255, 0.75)'
+            e.currentTarget.style.opacity = '1'
           }}
         >
           {item.label}
