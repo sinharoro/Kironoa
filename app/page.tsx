@@ -677,10 +677,17 @@ function ExperienceSection() {
 function MessagesSection({ refreshKey = 0 }: { refreshKey?: number }) {
   const [messages, setMessages] = useState<{ id: number; nickname: string; message: string; created_at: string }[]>([])
   const [deleting, setDeleting] = useState<number | null>(null)
-  const [showModal, setShowModal] = useState(false)
+  const [showDeleteModal, setShowDeleteModal] = useState(false)
   const [pendingId, setPendingId] = useState<number | null>(null)
   const [passcodeInput, setPasscodeInput] = useState('')
   const [passcodeError, setPasscodeError] = useState('')
+
+  const [editMsg, setEditMsg] = useState<{ id: number; nickname: string; message: string } | null>(null)
+  const [editNickname, setEditNickname] = useState('')
+  const [editMessage, setEditMessage] = useState('')
+  const [editPasscode, setEditPasscode] = useState('')
+  const [editError, setEditError] = useState('')
+  const [saving, setSaving] = useState(false)
 
   const fetchMessages = useCallback(() => {
     fetch(`${API_BASE}/messages.php`, { cache: 'no-store', headers: { 'ngrok-skip-browser-warning': 'true' } })
@@ -695,7 +702,7 @@ function MessagesSection({ refreshKey = 0 }: { refreshKey?: number }) {
     setPendingId(id)
     setPasscodeInput('')
     setPasscodeError('')
-    setShowModal(true)
+    setShowDeleteModal(true)
   }
 
   const confirmDelete = () => {
@@ -711,7 +718,7 @@ function MessagesSection({ refreshKey = 0 }: { refreshKey?: number }) {
       .then(res => res.json())
       .then(data => {
         if (data.success) {
-          setShowModal(false)
+          setShowDeleteModal(false)
           fetchMessages()
         } else {
           setPasscodeError(data.error || 'Failed to delete')
@@ -721,6 +728,37 @@ function MessagesSection({ refreshKey = 0 }: { refreshKey?: number }) {
         setPasscodeError('Network error')
       })
       .finally(() => setDeleting(null))
+  }
+
+  const openEditModal = (msg: { id: number; nickname: string; message: string }) => {
+    setEditMsg(msg)
+    setEditNickname(msg.nickname)
+    setEditMessage(msg.message)
+    setEditPasscode('')
+    setEditError('')
+  }
+
+  const confirmEdit = () => {
+    if (!editMsg || editPasscode.length !== 4) return
+    setSaving(true)
+    fetch(`${API_BASE}/messages.php`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json', 'ngrok-skip-browser-warning': 'true' },
+      body: JSON.stringify({ id: editMsg.id, nickname: editNickname, message: editMessage, passcode: editPasscode }),
+    })
+      .then(res => res.json())
+      .then(data => {
+        if (data.success) {
+          setEditMsg(null)
+          fetchMessages()
+        } else {
+          setEditError(data.error || 'Failed to update')
+        }
+      })
+      .catch(() => {
+        setEditError('Network error')
+      })
+      .finally(() => setSaving(false))
   }
 
   const formatTime = (dateStr: string) => {
@@ -746,6 +784,25 @@ function MessagesSection({ refreshKey = 0 }: { refreshKey?: number }) {
                       <span style={{ fontSize: '0.65rem', color: 'var(--color-text-muted)', whiteSpace: 'nowrap' }}>
                         {formatTime(msg.created_at)}
                       </span>
+                      <button
+                        onClick={() => openEditModal(msg)}
+                        style={{
+                          background: 'none',
+                          border: '1px solid var(--color-border)',
+                          borderRadius: '4px',
+                          color: 'var(--color-text-muted)',
+                          cursor: 'pointer',
+                          fontSize: '0.75rem',
+                          padding: '6px 10px',
+                          minWidth: '32px',
+                          minHeight: '32px',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                        }}
+                      >
+                        ✎
+                      </button>
                       <button
                         onClick={() => openDeleteModal(msg.id)}
                         disabled={deleting === msg.id}
@@ -781,9 +838,9 @@ function MessagesSection({ refreshKey = 0 }: { refreshKey?: number }) {
         </BentoBox>
       </div>
 
-      {showModal && (
+      {showDeleteModal && (
         <div
-          onClick={() => setShowModal(false)}
+          onClick={() => setShowDeleteModal(false)}
           style={{
             position: 'fixed',
             inset: 0,
@@ -846,7 +903,7 @@ function MessagesSection({ refreshKey = 0 }: { refreshKey?: number }) {
             )}
             <div style={{ display: 'flex', gap: '0.75rem', marginTop: '1.25rem' }}>
               <button
-                onClick={() => setShowModal(false)}
+                onClick={() => setShowDeleteModal(false)}
                 style={{
                   flex: 1,
                   padding: '0.75rem',
@@ -883,6 +940,137 @@ function MessagesSection({ refreshKey = 0 }: { refreshKey?: number }) {
           </div>
         </div>
       )}
+
+      {editMsg && (
+        <div
+          onClick={() => setEditMsg(null)}
+          style={{
+            position: 'fixed',
+            inset: 0,
+            background: 'rgba(0,0,0,0.6)',
+            backdropFilter: 'blur(4px)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            zIndex: 9999,
+          }}
+        >
+          <div
+            onClick={(e) => e.stopPropagation()}
+            style={{
+              background: 'var(--color-bg-alt)',
+              border: '1px solid var(--color-border)',
+              borderRadius: '12px',
+              padding: '2rem',
+              width: 'clamp(300px, 90vw, 400px)',
+              boxShadow: '0 20px 60px rgba(0,0,0,0.3)',
+            }}
+          >
+            <h3 style={{ margin: '0 0 1.25rem', fontSize: '1.1rem', color: 'var(--color-text)' }}>
+              Edit Message
+            </h3>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+              <input
+                type="text"
+                placeholder="Nickname"
+                value={editNickname}
+                onChange={(e) => setEditNickname(e.target.value)}
+                style={{
+                  padding: '0.85rem',
+                  border: '1px solid var(--color-border)',
+                  borderRadius: '8px',
+                  background: 'var(--color-bg)',
+                  color: 'var(--color-text)',
+                  fontSize: '1rem',
+                  fontFamily: 'inherit',
+                  outline: 'none',
+                  boxSizing: 'border-box',
+                }}
+              />
+              <textarea
+                placeholder="Message"
+                value={editMessage}
+                onChange={(e) => setEditMessage(e.target.value)}
+                rows={4}
+                style={{
+                  padding: '0.85rem',
+                  border: '1px solid var(--color-border)',
+                  borderRadius: '8px',
+                  background: 'var(--color-bg)',
+                  color: 'var(--color-text)',
+                  fontSize: '1rem',
+                  fontFamily: 'inherit',
+                  outline: 'none',
+                  resize: 'vertical',
+                  boxSizing: 'border-box',
+                }}
+              />
+              <input
+                type="password"
+                placeholder="Your 4-digit passcode"
+                value={editPasscode}
+                onChange={(e) => setEditPasscode(e.target.value.replace(/\D/g, '').slice(0, 4))}
+                maxLength={4}
+                inputMode="numeric"
+                style={{
+                  padding: '0.85rem',
+                  border: `1px solid ${editError ? 'var(--color-accent)' : 'var(--color-border)'}`,
+                  borderRadius: '8px',
+                  background: 'var(--color-bg)',
+                  color: 'var(--color-text)',
+                  fontSize: '1.5rem',
+                  textAlign: 'center',
+                  letterSpacing: '0.5em',
+                  fontFamily: 'monospace',
+                  outline: 'none',
+                  boxSizing: 'border-box',
+                }}
+              />
+              {editError && (
+                <p style={{ margin: 0, fontSize: '0.75rem', color: '#ff4444' }}>
+                  {editError}
+                </p>
+              )}
+            </div>
+            <div style={{ display: 'flex', gap: '0.75rem', marginTop: '1.25rem' }}>
+              <button
+                onClick={() => setEditMsg(null)}
+                style={{
+                  flex: 1,
+                  padding: '0.75rem',
+                  borderRadius: '8px',
+                  border: '1px solid var(--color-border)',
+                  background: 'transparent',
+                  color: 'var(--color-text-muted)',
+                  cursor: 'pointer',
+                  fontSize: '0.875rem',
+                  fontFamily: 'inherit',
+                }}
+              >
+                Cancel
+              </button>
+              <button
+                onClick={confirmEdit}
+                disabled={editPasscode.length !== 4 || saving}
+                style={{
+                  flex: 1,
+                  padding: '0.75rem',
+                  borderRadius: '8px',
+                  border: 'none',
+                  background: editPasscode.length === 4 ? 'var(--color-accent)' : 'var(--color-border)',
+                  color: editPasscode.length === 4 ? 'var(--color-bg)' : 'var(--color-text-muted)',
+                  cursor: editPasscode.length === 4 ? 'pointer' : 'not-allowed',
+                  fontSize: '0.875rem',
+                  fontWeight: 600,
+                  fontFamily: 'inherit',
+                }}
+              >
+                {saving ? 'Saving...' : 'Save'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </section>
   )
 }
@@ -890,6 +1078,7 @@ function MessagesSection({ refreshKey = 0 }: { refreshKey?: number }) {
 function ContactSection({ onMessageSent }: { onMessageSent?: () => void }) {
   const [nickname, setNickname] = useState('')
   const [message, setMessage] = useState('')
+  const [passcode, setPasscode] = useState('')
   const [submitting, setSubmitting] = useState(false)
   const [success, setSuccess] = useState('')
   const [error, setError] = useState('')
@@ -904,13 +1093,14 @@ function ContactSection({ onMessageSent }: { onMessageSent?: () => void }) {
       const res = await fetch(`${API_BASE}/messages.php`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'ngrok-skip-browser-warning': 'true' },
-        body: JSON.stringify({ nickname, message }),
+        body: JSON.stringify({ nickname, message, passcode }),
       })
       const data = await res.json()
       if (res.ok) {
         setSuccess('Message sent successfully!')
         setNickname('')
         setMessage('')
+        setPasscode('')
         onMessageSent?.()
       } else {
         setError(data.error || 'Failed to send message')
@@ -1027,6 +1217,26 @@ function ContactSection({ onMessageSent }: { onMessageSent?: () => void }) {
                   fontSize: '1rem',
                   fontFamily: 'inherit',
                   resize: 'vertical',
+                }}
+              />
+              <input
+                type="password"
+                placeholder="4-digit passcode (to edit/delete later)"
+                value={passcode}
+                onChange={(e) => setPasscode(e.target.value.replace(/\D/g, '').slice(0, 4))}
+                required
+                maxLength={4}
+                inputMode="numeric"
+                style={{
+                  padding: '1rem',
+                  border: '1px solid var(--color-border)',
+                  borderRadius: '4px',
+                  background: 'transparent',
+                  color: 'var(--color-text)',
+                  fontSize: '1rem',
+                  fontFamily: 'monospace',
+                  textAlign: 'center',
+                  letterSpacing: '0.5em',
                 }}
               />
               <MagneticButton>{submitting ? 'Sending...' : 'Send Message'}</MagneticButton>

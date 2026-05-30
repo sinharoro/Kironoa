@@ -5,6 +5,7 @@ CREATE TABLE IF NOT EXISTS messages (
     id INT AUTO_INCREMENT PRIMARY KEY,
     nickname VARCHAR(100) NOT NULL,
     message TEXT NOT NULL,
+    passcode_hash VARCHAR(255) NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
