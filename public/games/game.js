@@ -1,6 +1,6 @@
 window.focus();
 
-const API_BASE = 'http://localhost:8000/api'
+const API_BASE = 'http://localhost/backend/api'
 
 // --- Canvas Setup ---
 const canvas = document.getElementById('gameCanvas');
