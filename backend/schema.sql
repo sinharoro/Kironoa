@@ -1,9 +1,2 @@
 CREATE DATABASE IF NOT EXISTS meteor_blast;
 USE meteor_blast;
-
-CREATE TABLE IF NOT EXISTS leaderboard (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(100) NOT NULL,
-    score INT NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
