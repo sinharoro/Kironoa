@@ -1,18 +1,9 @@
-CREATE DATABASE IF NOT EXISTS kironoa;
-USE kironoa;
+CREATE DATABASE IF NOT EXISTS meteor_blast;
+USE meteor_blast;
 
-CREATE TABLE IF NOT EXISTS messages (
+CREATE TABLE IF NOT EXISTS leaderboard (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    nickname VARCHAR(100) NOT NULL,
-    message TEXT NOT NULL,
-    passcode_hash VARCHAR(255) NOT NULL,
+    name VARCHAR(100) NOT NULL,
+    score INT NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
-
-CREATE TABLE IF NOT EXISTS visits (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    count INT DEFAULT 0
-);
-
-INSERT INTO visits (id, count) VALUES (1, 0)
-ON DUPLICATE KEY UPDATE count = count;

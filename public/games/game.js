@@ -1,18 +1,6 @@
 window.focus();
 
-// --- Supabase Configuration ---
-// TODO: Replace with actual Supabase URL and key from .env.local
-const SUPABASE_URL = 'https://your-project.supabase.co'
-const SUPABASE_ANON_KEY = 'your_anon_key_here'
-
-let supabaseClient = null
-if (typeof supabase !== 'undefined' && SUPABASE_URL.startsWith('https://') && !SUPABASE_URL.includes('your-project')) {
-  try {
-    supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
-  } catch (e) {
-    console.warn('Supabase not available, leaderboard disabled')
-  }
-}
+const API_BASE = 'http://localhost:8000/api'
 
 // --- Canvas Setup ---
 const canvas = document.getElementById('gameCanvas');
@@ -132,30 +120,25 @@ class PowerUp {
 
 // --- Database Functions ---
 async function getHighScores() {
-    if (!supabaseClient) return;
     try {
-        const { data, error } = await supabaseClient
-            .from('leaderboard')
-            .select('name, score')
-            .order('score', { ascending: false })
-            .limit(5);
-
-        if (error) console.error('Error fetching scores:', error);
-        else updateLeaderboardUI(data);
+        const res = await fetch(`${API_BASE}/leaderboard.php`, {
+            headers: { 'ngrok-skip-browser-warning': 'true' }
+        });
+        const data = await res.json();
+        if (Array.isArray(data)) updateLeaderboardUI(data);
     } catch(e) {
         console.warn('Leaderboard unavailable');
     }
 }
 
 async function saveScore(playerName, playerScore) {
-    if (!supabaseClient) return;
     try {
-        const { error } = await supabaseClient
-            .from('leaderboard')
-            .insert([{ name: playerName, score: playerScore }]);
-
-        if (error) console.error('Error saving score:', error);
-        else getHighScores();
+        const res = await fetch(`${API_BASE}/leaderboard.php`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'ngrok-skip-browser-warning': 'true' },
+            body: JSON.stringify({ name: playerName, score: playerScore }),
+        });
+        if (res.ok) getHighScores();
     } catch(e) {
         console.warn('Leaderboard unavailable');
     }
@@ -586,9 +569,8 @@ async function stopGame(msg = "MISSION FAILED SUCCESSFULLY") {
     ctx.font = "bold 20px 'Courier New'"; ctx.fillText(`FINAL SCORE: ${score}`, canvas.width / 2, canvas.height / 2 - 30);
     const spinner = document.getElementById('loading-spinner');
     if (spinner) { spinner.style.display = 'block'; spinner.style.top = '82%'; }
-    try { await saveScore(currentPlayerName, score); await getHighScores(); }
-    catch (error) { console.warn("Leaderboard unavailable:", error); }
-    finally { setTimeout(() => { if (spinner) spinner.style.display = 'none'; resetGame(); }, 4000); }
+    saveScore(currentPlayerName, score);
+    setTimeout(() => { if (spinner) spinner.style.display = 'none'; resetGame(); }, 4000);
 }
 
 // FIX BUG 5: Reset ALL player state properly
