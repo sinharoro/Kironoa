@@ -3,7 +3,6 @@
 import { useEffect, useRef, useState, memo } from 'react'
 import { motion, useScroll, useTransform, useSpring, useInView, AnimatePresence } from 'framer-motion'
 import Lenis from 'lenis'
-import ScrollSwarm from './components/ScrollSwarm'
 import UiRebuild from './components/UiRebuild'
 import SectionRebuild from './components/SectionRebuild'
 
@@ -1108,7 +1107,6 @@ export default function Home() {
         <FloatingNav />
         <ThemeToggle theme={theme} />
         <CustomCursor />
-        <ScrollSwarm theme={theme} />
         <HeroSection theme={theme} toggleTheme={toggleTheme} />
         <ProjectsSection introDone={introDone} />
         <SkillsSection introDone={introDone} />
