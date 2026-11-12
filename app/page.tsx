@@ -3,6 +3,9 @@
 import { useEffect, useRef, useState, memo } from 'react'
 import { motion, useScroll, useTransform, useSpring, useInView, AnimatePresence } from 'framer-motion'
 import Lenis from 'lenis'
+import ScrollSwarm from './components/ScrollSwarm'
+import UiRebuild from './components/UiRebuild'
+import SectionRebuild from './components/SectionRebuild'
 
 const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api'
 
@@ -324,7 +327,7 @@ function HeroSection({ theme, toggleTheme }: { theme: string; toggleTheme: () =>
                   color: 'var(--color-accent)',
                 }}
               >
-                Creative Developer
+                Vibe Developer
               </motion.p>
             </TextReveal>
           </div>
@@ -415,9 +418,9 @@ function HeroSection({ theme, toggleTheme }: { theme: string; toggleTheme: () =>
   )
 }
 
-function AboutSection() {
+function AboutSection({ introDone }: { introDone: boolean }) {
   return (
-    <section id="about" style={{ padding: 'var(--section-py) clamp(1.5rem, 5vw, 6em)' }}>
+    <section id="about" style={{ position: 'relative', padding: 'var(--section-py) clamp(1.5rem, 5vw, 6em)' }}>
       <div className="container">
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
           <TextReveal>
@@ -440,22 +443,24 @@ function AboutSection() {
           </BentoBox>
           <BentoBox>
             <p style={{ fontSize: '1.125rem', lineHeight: 1.7, color: 'var(--color-text-muted)' }}>
-              Design-driven developer focused on creating memorable digital products that merge aesthetics with functionality.
+              Vibe-driven developer focused on creating memorable digital products that merge aesthetics with functionality.
             </p>
           </BentoBox>
         </div>
 
-        <div style={{ display: 'grid', gridTemplateColumns: 'var(--about-stats-grid)', gap: '1.5rem', marginTop: '1.5rem' }}>
-          <BentoBox>
-            <p style={{ fontSize: 'var(--stats-number-size)', fontWeight: 800, color: 'var(--color-accent)', marginBottom: '0.5rem' }}>2+</p>
-            <p style={{ fontSize: '0.875rem', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Months Experience</p>
-          </BentoBox>
-          <BentoBox>
-            <p style={{ fontSize: 'var(--stats-number-size)', fontWeight: 800, color: 'var(--color-accent)', marginBottom: '0.5rem' }}>10+</p>
-            <p style={{ fontSize: '0.875rem', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Projects Completed</p>
-          </BentoBox>
-        </div>
+        <BentoBox style={{ marginTop: '1.5rem' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flexWrap: 'wrap' }}>
+            <span className="status-dot" aria-hidden="true" />
+            <span style={{ fontSize: '0.7rem', letterSpacing: '0.2em', textTransform: 'uppercase', color: 'var(--color-accent)' }}>
+              Free Time
+            </span>
+            <p style={{ fontSize: '1rem', color: 'var(--color-text-muted)' }}>
+              Vibing when I have free time.
+            </p>
+          </div>
+        </BentoBox>
       </div>
+      <SectionRebuild name="About" enabled={introDone} />
     </section>
   )
 }
@@ -572,7 +577,7 @@ function ProjectShowcaseBox({ project, index, theme }: { project: typeof project
   )
 }
 
-function ProjectsSection() {
+function ProjectsSection({ introDone }: { introDone: boolean }) {
   const [theme, setTheme] = useState('dark')
   
   useEffect(() => {
@@ -581,7 +586,7 @@ function ProjectsSection() {
   }, [])
 
   return (
-    <section id="projects" style={{ padding: 'var(--section-py) clamp(1.5rem, 5vw, 6em)', background: 'var(--color-bg-alt)' }}>
+    <section id="projects" style={{ position: 'relative', padding: 'var(--section-py) clamp(1.5rem, 5vw, 6em)', background: 'var(--color-bg-alt)' }}>
       <div className="container">
         <TextReveal>
           <h2 className="section-title">Projects</h2>
@@ -602,13 +607,14 @@ function ProjectsSection() {
           ))}
         </div>
       </div>
+      <SectionRebuild name="Projects" enabled={introDone} />
     </section>
   )
 }
 
-function SkillsSection() {
+function SkillsSection({ introDone }: { introDone: boolean }) {
   return (
-    <section id="skills" style={{ padding: 'var(--section-py) clamp(1.5rem, 5vw, 6em)' }}>
+    <section id="skills" style={{ position: 'relative', padding: 'var(--section-py) clamp(1.5rem, 5vw, 6em)' }}>
       <div className="container">
         <TextReveal>
           <h2 className="section-title">Skills</h2>
@@ -646,13 +652,14 @@ function SkillsSection() {
           ))}
         </div>
       </div>
+      <SectionRebuild name="Skills" enabled={introDone} />
     </section>
   )
 }
 
-function ExperienceSection() {
+function ExperienceSection({ introDone }: { introDone: boolean }) {
   return (
-    <section id="experience" style={{ padding: 'var(--section-py) clamp(1.5rem, 5vw, 6em)', background: 'var(--color-bg-alt)' }}>
+    <section id="experience" style={{ position: 'relative', padding: 'var(--section-py) clamp(1.5rem, 5vw, 6em)', background: 'var(--color-bg-alt)' }}>
       <div className="container">
         <TextReveal>
           <h2 className="section-title">Experience</h2>
@@ -670,15 +677,16 @@ function ExperienceSection() {
           ))}
         </div>
       </div>
+      <SectionRebuild name="Experience" enabled={introDone} />
     </section>
   )
 }
 
 
 
-function ContactSection() {
+function ContactSection({ introDone }: { introDone: boolean }) {
   return (
-    <section id="contact" style={{ padding: 'var(--section-py) clamp(1.5rem, 5vw, 6em)' }}>
+    <section id="contact" style={{ position: 'relative', padding: 'var(--section-py) clamp(1.5rem, 5vw, 6em)' }}>
       <div className="container">
         <TextReveal>
           <h2 className="section-title">Contact</h2>
@@ -743,6 +751,7 @@ function ContactSection() {
           
         </div>
       </div>
+      <SectionRebuild name="Contact" enabled={introDone} />
     </section>
   )
 }
@@ -1068,6 +1077,7 @@ export default function Home() {
   const [mounted, setMounted] = useState(false)
   const [theme, setTheme] = useState('dark')
   const [loading, setLoading] = useState(true)
+  const [introDone, setIntroDone] = useState(false)
 
 
   useEffect(() => {
@@ -1092,17 +1102,19 @@ export default function Home() {
 
   return (
     <SmoothScroll>
+      <UiRebuild theme={theme} onDone={() => setIntroDone(true)} />
       <PageTransition>
         <FloatingClock theme={theme} />
         <FloatingNav />
         <ThemeToggle theme={theme} />
         <CustomCursor />
+        <ScrollSwarm theme={theme} />
         <HeroSection theme={theme} toggleTheme={toggleTheme} />
-        <ProjectsSection />
-        <SkillsSection />
-        <ExperienceSection />
-        <AboutSection />
-        <ContactSection />
+        <ProjectsSection introDone={introDone} />
+        <SkillsSection introDone={introDone} />
+        <ExperienceSection introDone={introDone} />
+        <AboutSection introDone={introDone} />
+        <ContactSection introDone={introDone} />
         <Footer />
       </PageTransition>
     </SmoothScroll>

@@ -16,14 +16,12 @@
   --skills-grid: repeat(3, 1fr);
   --experience-grid: 150px 1fr;
   --projects-grid: repeat(auto-fit, minmax(300px, 1fr));
-  --about-stats-grid: 1fr 1fr;
   --about-bio-grid: repeat(auto-fit, minmax(280px, 1fr));
   --contact-grid: repeat(auto-fit, minmax(300px, 1fr));
   --hero-fd: row;
   --hero-img-order: 0;
   --hero-section-padding: 0 clamp(3rem, 6vw, 6rem);
   --hero-gap: clamp(2rem, 5vw, 6rem);
-  --stats-number-size: 4rem;
   --section-title-size: 2rem;
   --section-title-mb: 3rem;
   --bento-padding: 2rem;
@@ -273,11 +271,25 @@ input, textarea {
   to { opacity: 1; }
 }
 
+@keyframes statusPulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.45; transform: scale(0.85); }
+}
+
+.status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--color-accent);
+  box-shadow: 0 0 0 4px rgba(0, 245, 160, 0.12);
+  animation: statusPulse 2s ease-in-out infinite;
+  flex-shrink: 0;
+}
+
 @media (max-width: 768px) {
   :root {
     --skills-grid: repeat(2, 1fr);
     --experience-grid: 1fr;
-    --stats-number-size: 3rem;
     --section-title-size: 1.5rem;
     --section-title-mb: 2rem;
     --bento-padding: 1.5rem;
@@ -331,13 +343,11 @@ input, textarea {
   :root {
     --skills-grid: 1fr;
     --projects-grid: 1fr;
-    --about-stats-grid: 1fr;
     --about-bio-grid: 1fr;
     --contact-grid: 1fr;
     --hero-fd: column;
     --hero-img-order: -1;
     --hero-section-padding: 0 1.5rem;
-    --stats-number-size: 2.5rem;
     --bento-padding: 1.25rem;
     --footer-padding: 1.5rem;
     --social-gap: 1rem;
@@ -352,7 +362,6 @@ input, textarea {
 
 @media (max-width: 360px) {
   :root {
-    --stats-number-size: 2rem;
     --bento-padding: 1rem;
     --footer-padding: 1.25rem;
     --social-gap: 0.75rem;
@@ -366,5 +375,20 @@ input, textarea {
 
   .container {
     padding: 0 0.75rem;
+  }
+}
+
+.section-rebuilding > :not([data-section-build-host]) {
+  visibility: hidden !important;
+}
+
+.rebuild-hud {
+  position: fixed;
+  bottom: clamp(1rem, 3vw, 2rem);
+}
+
+@media (max-width: 768px) {
+  .rebuild-hud {
+    bottom: calc(5.25rem + env(safe-area-inset-bottom));
   }
 }
