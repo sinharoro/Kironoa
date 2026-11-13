@@ -5,6 +5,7 @@ import { motion, useScroll, useTransform, useSpring, useInView, AnimatePresence 
 import Lenis from 'lenis'
 import UiRebuild from './components/UiRebuild'
 import SectionRebuild from './components/SectionRebuild'
+import { asset } from './site'
 
 const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api'
 
@@ -16,16 +17,16 @@ const projects = [
     category: 'Game',
     year: '2026',
     link: 'https://meteor-blast.vercel.app/',
-    logo: '/images/MBlast logo.png',
-    showcase: '/images/MBlast logo.png',
+    logo: asset('/images/MBlast logo.png'),
+    showcase: asset('/images/MBlast logo.png'),
   },
   {
     title: 'The Den',
     category: 'E-Commerce Platform',
     year: '2026',
     link: 'https://thedenpagadiancity.vercel.app/',
-    logo: '/images/The Den logo.jpg',
-    showcase: '/images/The Den showcase card.png',
+    logo: asset('/images/The Den logo.jpg'),
+    showcase: asset('/images/The Den showcase card.png'),
   },
 ]
 
@@ -307,7 +308,7 @@ function HeroSection({ theme, toggleTheme }: { theme: string; toggleTheme: () =>
         <div style={{ flex: 1, minWidth: 0 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 'clamp(1rem, 2vw, 2rem)', marginBottom: '2rem' }}>
             <img 
-              src="/images/minilogoKR.png" 
+              src={asset('/images/minilogoKR.png')} 
               alt="Kironoa Logo" 
               width={70}
               height={70}
@@ -379,7 +380,7 @@ function HeroSection({ theme, toggleTheme }: { theme: string; toggleTheme: () =>
             flexShrink: 0,
           }}>
             <img 
-              src='/images/Kironoa.png' 
+              src={asset('/images/Kironoa.png')} 
               alt="Kironoa Roro" 
               width={320}
               height={320}
@@ -395,7 +396,7 @@ function HeroSection({ theme, toggleTheme }: { theme: string; toggleTheme: () =>
               }}
             />
             <img 
-              src='/images/KironoaL.png' 
+              src={asset('/images/KironoaL.png')} 
               alt="Kironoa Roro Light" 
               width={320}
               height={320}
@@ -999,7 +1000,7 @@ function FloatingNav() {
 
 const ThemeToggle = memo(function ThemeToggle({ theme }: { theme: string }) {
   const [bgIndex, setBgIndex] = useState(0)
-  const backgrounds = ['/images/saogreen.png', '/images/saopurple.png', '/images/saored.png']
+  const backgrounds = [asset('/images/saogreen.png'), asset('/images/saopurple.png'), asset('/images/saored.png')]
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -1017,7 +1018,7 @@ const ThemeToggle = memo(function ThemeToggle({ theme }: { theme: string }) {
           position: 'fixed',
           top: 0, left: 0, width: '100%', height: '100%',
           zIndex: -3,
-          backgroundImage: `url('/images/saobg.jpg')`,
+          backgroundImage: `url('${asset('/images/saobg.jpg')}')`,
           backgroundSize: 'cover', backgroundPosition: 'center',
           opacity: isLight ? 0 : 1,
           transition: 'opacity 0.8s ease',
@@ -1061,7 +1062,7 @@ const LoadingScreen = memo(function LoadingScreen() {
       }}
     >
       <img 
-        src="/images/one-piece-luffy.gif" 
+        src={asset('/images/one-piece-luffy.gif')} 
         alt="Loading" 
         style={{
           width: 'clamp(100px, 30vw, 200px)',

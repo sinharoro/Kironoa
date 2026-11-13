@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'
+import { asset } from './site'
 
 const inter = Inter({ 
   subsets: ['latin'],
@@ -11,7 +12,7 @@ export const metadata: Metadata = {
   title: 'Portfolio | Kironoa Roro',
   description: 'A high-performance personal portfolio',
   icons: {
-    icon: '/images/Kiro.png',
+    icon: asset('/images/Kiro.png'),
   },
 }
 

@@ -1,8 +1,11 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  output: 'export',
+  trailingSlash: true,
   images: {
-    domains: [],
+    unoptimized: true,
   },
+  basePath: process.env.NEXT_PUBLIC_BASE_PATH || '',
 };
 
 module.exports = nextConfig;

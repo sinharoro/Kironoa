@@ -1,4 +1,6 @@
-export const SWARM_CURSOR_SRC = '/images/swarm-cursor.png'
+import { asset } from '../site'
+
+export const SWARM_CURSOR_SRC = asset('/images/swarm-cursor.png')
 export const SWARM_HOTSPOT_X = 23 / 32
 export const SWARM_HOTSPOT_Y = 4 / 32
 
