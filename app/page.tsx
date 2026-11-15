@@ -276,7 +276,7 @@ const BentoBox = memo(function BentoBox({ children, className = '', style }: { c
         border: '1px solid var(--color-border)',
         borderRadius: '8px',
         padding: 'var(--bento-padding)',
-        background: 'var(--color-bg-alt)',
+        background: 'var(--color-surface)',
         transition: 'border-color 0.3s, box-shadow 0.3s',
         willChange: 'transform, opacity',
       }}
@@ -491,7 +491,7 @@ function ProjectShowcaseBox({ project, index, theme }: { project: typeof project
         border: '1px solid var(--color-border)',
         borderRadius: '12px',
         overflow: 'hidden',
-        background: 'var(--color-bg-alt)',
+        background: 'var(--color-surface)',
         cursor: project.link ? 'pointer' : 'default',
         aspectRatio: '4/3',
       }}

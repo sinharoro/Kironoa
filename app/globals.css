@@ -3,6 +3,7 @@
 :root {
   --color-bg: #080C0B;
   --color-bg-alt: #141F1A;
+  --color-surface: #141F1A;
   --color-bg-overlay: rgba(0, 0, 0, 0.75);
   --color-text: #FFFFFF;
   --color-text-muted: #D8E0DB;
@@ -41,8 +42,9 @@
 }
 
 [data-theme="light"] {
-  --color-bg: #F5F7F6;
-  --color-bg-alt: #FFFFFF;
+  --color-bg: #F3F6F4;
+  --color-bg-alt: #E8F0EB;
+  --color-surface: #F8FAF8;
   --color-bg-overlay: rgba(255, 255, 255, 0.85);
   --color-text: #080C0B;
   --color-text-muted: #5A6B63;
