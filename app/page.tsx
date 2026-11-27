@@ -963,37 +963,61 @@ function FloatingNav() {
       e.currentTarget.style.opacity = '1'
     }}
     >
-      {navItems.map((item) => (
-        <button
-          key={item.id}
-          onClick={() => scrollToSection(item.id)}
-          style={{
-            padding: 'var(--nav-btn-py) var(--nav-btn-px)',
-            borderRadius: '50px',
-            border: 'none',
-            background: 'transparent',
-            color: 'rgba(255, 255, 255, 0.75)',
-            fontSize: 'var(--nav-font-size)',
-            fontWeight: 500,
-            cursor: 'pointer',
-            transition: 'all 0.3s ease',
-            opacity: 1,
-            whiteSpace: 'nowrap',
-          }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.background = 'var(--color-accent)'
-            e.currentTarget.style.color = 'var(--color-bg)'
-            e.currentTarget.style.opacity = '1'
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.background = 'transparent'
-            e.currentTarget.style.color = 'rgba(255, 255, 255, 0.75)'
-            e.currentTarget.style.opacity = '1'
-          }}
-        >
-          {item.label}
-        </button>
-      ))}
+      <ul className="nav-list">
+        {navItems.map((item) => (
+          <li key={item.id}>
+            <button
+              onClick={() => scrollToSection(item.id)}
+              style={{
+                padding: 'var(--nav-btn-py) var(--nav-btn-px)',
+                borderRadius: '50px',
+                border: 'none',
+                background: 'transparent',
+                color: 'rgba(255, 255, 255, 0.75)',
+                fontSize: 'var(--nav-font-size)',
+                fontWeight: 500,
+                cursor: 'pointer',
+                transition: 'all 0.3s ease',
+                opacity: 1,
+                whiteSpace: 'nowrap',
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.background = 'var(--color-accent)'
+                e.currentTarget.style.color = 'var(--color-bg)'
+                e.currentTarget.style.opacity = '1'
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.background = 'transparent'
+                e.currentTarget.style.color = 'rgba(255, 255, 255, 0.75)'
+                e.currentTarget.style.opacity = '1'
+              }}
+            >
+              {item.label}
+            </button>
+          </li>
+        ))}
+        <li className="dropdown">
+          <button
+            id="dropdownBtn"
+            type="button"
+            aria-haspopup="true"
+            aria-expanded={false}
+          >
+            Explore <span className="dropdown-arrow" aria-hidden="true">▼</span>
+          </button>
+          <ul id="dropdownMenu" className="dropdown-menu" role="menu">
+            <li role="none">
+              <a role="menuitem" href="#projects">Projects</a>
+            </li>
+            <li role="none">
+              <a role="menuitem" href="#skills">Skills</a>
+            </li>
+            <li role="none">
+              <a role="menuitem" href="#experience">Experience</a>
+            </li>
+          </ul>
+        </li>
+      </ul>
     </nav>
   )
 }

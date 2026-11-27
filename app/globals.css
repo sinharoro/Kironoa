@@ -394,3 +394,113 @@ input, textarea {
     bottom: calc(5.25rem + env(safe-area-inset-bottom));
   }
 }
+
+.nav-list {
+  display: contents;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.nav-list > li {
+  list-style: none;
+}
+
+.dropdown {
+  position: relative;
+  list-style: none;
+}
+
+#dropdownBtn {
+  padding: var(--nav-btn-py) var(--nav-btn-px);
+  border-radius: 50px;
+  border: none;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.75);
+  font-family: inherit;
+  font-size: var(--nav-font-size);
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  opacity: 1;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+#dropdownBtn:hover,
+#dropdownBtn[aria-expanded="true"] {
+  background: var(--color-accent);
+  color: var(--color-bg);
+  opacity: 1;
+}
+
+.dropdown-arrow {
+  font-size: 0.75em;
+  line-height: 1;
+  transition: transform 0.25s var(--ease-out-expo);
+}
+
+#dropdownBtn[aria-expanded="true"] .dropdown-arrow {
+  transform: rotate(180deg);
+}
+
+.dropdown-menu {
+  display: none;
+  position: absolute;
+  bottom: calc(100% + 10px);
+  left: 50%;
+  transform: translateX(-50%);
+  min-width: 180px;
+  max-width: calc(100vw - 2rem);
+  list-style: none;
+  margin: 0;
+  padding: 0.5rem;
+  background: var(--color-bg-alt);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(10px);
+  z-index: 200;
+}
+
+.dropdown-menu.show {
+  display: block;
+}
+
+.dropdown-menu > li {
+  list-style: none;
+}
+
+.dropdown-menu a {
+  display: block;
+  padding: 0.6rem 0.9rem;
+  border-radius: 8px;
+  color: var(--color-text-muted);
+  font-size: var(--nav-font-size);
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.dropdown-menu a:hover {
+  background: var(--color-accent);
+  color: var(--color-bg);
+}
+
+@media (max-width: 768px) {
+  .dropdown-menu {
+    min-width: 160px;
+  }
+}
+
+@media (max-width: 480px) {
+  .dropdown-menu {
+    left: auto;
+    right: 0;
+    transform: none;
+    min-width: 150px;
+  }
+}

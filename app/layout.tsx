@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import Script from 'next/script'
 import { Inter } from 'next/font/google'
 import './globals.css'
 import { asset } from './site'
@@ -32,6 +33,7 @@ export default function RootLayout({
       <body>
         {children}
         <div className="noise-overlay" />
+        <Script src={asset('/script.js')} strategy="afterInteractive" />
       </body>
     </html>
   )
