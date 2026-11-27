@@ -1003,17 +1003,17 @@ function FloatingNav() {
             aria-haspopup="true"
             aria-expanded={false}
           >
-            Explore <span className="dropdown-arrow" aria-hidden="true">▼</span>
+            Connect <span className="dropdown-arrow" aria-hidden="true">▼</span>
           </button>
           <ul id="dropdownMenu" className="dropdown-menu" role="menu">
             <li role="none">
-              <a role="menuitem" href="#projects">Projects</a>
+              <a role="menuitem" href="https://www.facebook.com/SinhaRoro" target="_blank" rel="noopener noreferrer">Facebook</a>
             </li>
             <li role="none">
-              <a role="menuitem" href="#skills">Skills</a>
+              <a role="menuitem" href="https://www.instagram.com/sinharoro/" target="_blank" rel="noopener noreferrer">Instagram</a>
             </li>
             <li role="none">
-              <a role="menuitem" href="#experience">Experience</a>
+              <a role="menuitem" href="mailto:kirigayaroro@gmail.com">Email</a>
             </li>
           </ul>
         </li>
